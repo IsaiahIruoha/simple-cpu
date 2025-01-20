@@ -1,4 +1,4 @@
-module register #(
+module register_32bit #(
     parameter DATA_WIDTH_IN = 32,
     parameter DATA_WIDTH_OUT = 32,
     parameter INIT = 32'h0
