@@ -1,4 +1,4 @@
-module 2_to_1_mux (input wire [31:0] in1, input wire [31:0] in2, input wire signal, output reg [31:0] out);
+module mux_2_to_1 (input wire [31:0] in1, input wire [31:0] in2, input wire signal, output reg [31:0] out);
 
   always @(*)begin 
     if (signal) begin

@@ -1,4 +1,4 @@
-module 32_to_5_encoder (input wire [31:0] encoderInput, output reg [4:0] encoderOutput);
+module encoder_32_to_5 (input wire [31:0] encoderInput, output reg [4:0] encoderOutput);
 	always @ (*) begin
     case (encoderInput)
         32'b00000000000000000000000000000001: encoderOutput <= 5'd0;
@@ -28,4 +28,4 @@ module 32_to_5_encoder (input wire [31:0] encoderInput, output reg [4:0] encoder
         default: encoderOutput <= 5'd31;
     endcase
 	end
-end module
+endmodule

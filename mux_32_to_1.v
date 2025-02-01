@@ -1,6 +1,6 @@
 // 32-1 MUX used for bus
 
-module 32_to_1_mux( 
+module mux_32_to_1( 
 
   // 16 General Purpose Registers 
   input [31:0] BusMuxIn_R0,
