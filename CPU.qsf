@@ -69,3 +69,5 @@ set_global_assignment -name VERILOG_FILE Tutorial/Bus.v
 set_global_assignment -name VERILOG_FILE Tutorial/DataPath.v
 set_global_assignment -name VERILOG_FILE Tutorial/register.v
 set_global_assignment -name VERILOG_FILE Tutorial/tutorial_tb.v
+set_global_assignment -name VERILOG_FILE 32_to_5_encoder.v
+set_global_assignment -name VERILOG_FILE 32_to_1_mux.v
