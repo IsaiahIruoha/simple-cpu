@@ -30,7 +30,7 @@ module mux_32_to_1(
 	input [31:0] C_sign_extended,
 
   // Define Mux Output into Bus
-  output reg [31:0] BuxMuxOut,
+  output reg [31:0] BusMuxOut,
 
   // Select signal (from encoder) 
   input wire [4:0] mux_select_signal

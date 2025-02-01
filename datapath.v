@@ -3,15 +3,14 @@
 module datapath(
     input  wire        clock,
     input  wire        clear, 
-    // Enables for a few registers (you can add more if you like)
+    // Enables for a few registers
     input  wire        R0_enable,
     input  wire        R1_enable,
     input  wire        R2_enable,
     input  wire        R3_enable,
     // Mux select signal to pick which source goes onto the bus
     input  wire [4:0]  mux_select_signal,
-    // If you want to “inject” a 32-bit value onto the bus (like sign-extended immediate)
-    // we can re-use the 'C_sign_extended' input in the mux for simplicity
+
     input  wire [31:0] external_data,
     
     // We will expose these so you can watch them in simulation
@@ -23,9 +22,7 @@ module datapath(
     output wire [31:0] bus_data
 );
 
-    //--------------------------------------------
     // 1) Instantiate 32-bit registers R0..R3
-    //--------------------------------------------
     // Each register’s “BusMuxOut” port is the bus input,
     // and “BusMuxIn” is that register’s output signal.
 
@@ -33,8 +30,8 @@ module datapath(
         .clear(clear),
         .clock(clock),
         .enable(R0_enable),
-        .BusMuxOut(bus_data),   // value *from* the bus
-        .BusMuxIn(R0_data)      // value *to* the bus mux
+        .BusMuxOut(bus_data),
+        .BusMuxIn(R0_data)
     );
     
     register_32bit r1 (
@@ -61,18 +58,9 @@ module datapath(
         .BusMuxIn(R3_data)
     );
 
-    //--------------------------------------------
     // 2) Instantiate the 32-to-1 MUX 
-    //    (Bus “driver”)
-    //--------------------------------------------
-    // We only connect the lines we care about here for brevity.
-    // The others can be tied to 32'h0 or just left unconnected
-    // if you do not use them in your test.
-    //--------------------------------------------
-    // We will connect only the first 4 registers + the “C_sign_extended” input.
-    // You can connect more registers (PC, Z_high, etc.) if you wish.
     
-    32_to_1_mux bus_mux (
+    mux_32_to_1 bus_mux (
         .BusMuxIn_R0      (R0_data),
         .BusMuxIn_R1      (R1_data),
         .BusMuxIn_R2      (R2_data),

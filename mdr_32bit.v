@@ -6,7 +6,7 @@ module mdr_32bit (
 
 wire [31:0] mux_out;
 
-2_to_1_mux md_mux (
+mux_2_to_1 md_mux (
     .in1(BusMuxOut),
     .in2(Mdatain),
     .signal(Read),
