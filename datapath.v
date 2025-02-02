@@ -8,10 +8,13 @@ module datapath(
     // We will expose these so you can watch them in simulation
 	 input wire R0_enable,
 	 input wire R1_enable,
-	 input wire R2_enable,
+	 
+	 input wire MDR_in,
+	 input wire read,
+	 input wire [31:0] Mdata_in,
+	 
 	 output wire [31:0] R0_data,
     output wire [31:0] R1_data,
-    output wire [31:0] R2_data,
 	 
 	 input wire [31:0] encoder_input,
 	 
@@ -25,8 +28,6 @@ module datapath(
 
     register_32bit r0 (clear, clock, R0_enable, bus_data, R0_data);
 	 register_32bit r1 (clear, clock, R1_enable, bus_data, R1_data);
-	 register_32bit r2 (clear, clock, R2_enable, bus_data, R2_data);
-    
 	 
 	 
 	 wire [4:0] mux_select_signal;
