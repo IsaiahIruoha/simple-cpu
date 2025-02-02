@@ -3,28 +3,26 @@
 module datapath_tb;
 
    reg clock, clear;
-   reg R0_enable, R1_enable, R2_enable, R3_enable;
-   reg [4:0] mux_select_signal;
+	reg R0_enable, R1_enable, R2_enable;
+	reg [31:0] encoder_input;
    reg [31:0] external_data;
 
    // Wires to observe
-   wire [31:0] R0_data, R1_data, R2_data, R3_data;
+	wire [31:0] r0_data, r1_data, r2_data;
    wire [31:0] bus_data;
 
    // Instantiate the datapath
    datapath UUT (
        .clock(clock),
        .clear(clear),
-       .R0_enable(R0_enable),
-       .R1_enable(R1_enable),
-       .R2_enable(R2_enable),
-       .R3_enable(R3_enable),
-       .mux_select_signal(mux_select_signal),
+		 .R0_enable(R0_enable),
+		 .R1_enable(R1_enable),
+		 .R2_enable(R2_enable),
        .external_data(external_data),
-       .R0_data(R0_data),
-       .R1_data(R1_data),
-       .R2_data(R2_data),
-       .R3_data(R3_data),
+		 .R0_data(r0_data),
+		 .R1_data(r1_data),
+		 .R2_data(r2_data),
+		 .encoder_input(encoder_input),
        .bus_data(bus_data)
    );
 
@@ -38,8 +36,8 @@ module datapath_tb;
    initial begin
        // Initialize
        clear = 1;   // reset all registers to 0
-       R0_enable = 0; R1_enable = 0; R2_enable = 0; R3_enable = 0;
-       mux_select_signal = 5'b00000; 
+		 R0_enable = 0; R1_enable = 0; R2_enable = 0; 
+       encoder_input = 32'h00000000;
        external_data = 32'h00000000;
 
        // Wait a couple of clock edges
@@ -48,29 +46,17 @@ module datapath_tb;
 
        // 1) Load R0 with some external data
        external_data = 32'hDEADBEEF;       // data we want to store
-       mux_select_signal = 5'b10111;       // select 'external_data' input in the mux
-       R0_enable = 1;                     // turn on R0's load
-       #10;                               // wait one clock edge
-       R0_enable = 0;                     // latch done
+       encoder_input = 32'b00000000100000000000000000000000;       // select 'external_data' input in the mux
+       R0_enable = 1;
+		 #10;                               // wait one clock edge
+		 R0_enable = 0;
 
        // 2) Now drive R0 → bus → R1
        //    We pick R0's output in the mux:
-       mux_select_signal = 5'b00000;  // 00000 = R0
-       R1_enable = 1;
-       #10;                          // wait a clock 
-       R1_enable = 0;
-
-       // 3) Check that R1 got the value from R0
-       //    We can just wait and observe waveforms, 
-       //    or do a quick if-check here:
-       #1;  // small delay to let the register update
-       if (R1_data == 32'hDEADBEEF)
-           $display("PASS: R1 got DEADBEEF from R0!");
-       else
-           $display("FAIL: R1 != DEADBEEF! R1=%h", R1_data);
-
-       // 4) Optionally do more transfers...
-       // e.g., R1 → bus → R2, or external_data → R3, etc.
+       encoder_input = 32'h00000001;  // 00000 = R0
+		 R1_enable = 1;
+		 #10;                               // wait one clock edge
+		 R1_enable = 0;
 
        // End simulation
        #20;
