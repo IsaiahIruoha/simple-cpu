@@ -3,3 +3,7 @@ output_files/
 db/
 incremental_db/
 *.bak
+*.qpf
+*.qsf
+*.rpt
+*.txt
