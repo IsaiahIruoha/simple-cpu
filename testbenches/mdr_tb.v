@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module mdr_testbench;
+module mdr_tb;
 
    // Clock and reset
    reg  clock, clear;
@@ -13,7 +13,7 @@ module mdr_testbench;
    reg  [31:0] MDR_data_in;
 
    // We'll watch this to see what's in MDR
-   wire [31:0] MDR_data_out; 
+//   wire [31:0] MDR_data_out; 
 
    // The datapath’s bus output
    wire [31:0] bus_data;
@@ -34,7 +34,6 @@ module mdr_testbench;
        .MDR_enable  (MDR_enable),
        .Read        (Read),
        .MDR_data_in (MDR_data_in),
-       .MDR_data_out(MDR_data_out),
 
        // The bus output
        .bus_data    (bus_data)

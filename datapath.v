@@ -5,10 +5,6 @@ module datapath(
 	 
 	 //used to assert a signal in the encoder, later will be changed
 	 input wire [31:0] encoder_input,
-	 
-	 input wire MDR_enable, Read,
-	 input wire [31:0] MDR_data_in,
-	 input wire [31:0] MDR_data_out,
 
 	 
     // The bus output from the mux
@@ -16,15 +12,14 @@ module datapath(
 );
 
 	 // enables for various registers
-//	 wire MDR_enable, Read, 
-	 wire Y_enable, HI_enable, LO_enable, Z_high_enable, Z_low_enable, PC_enable, IR_enable, Input_port_enable, MAR_enable;
+	 wire MDR_enable, Read, Y_enable, HI_enable, LO_enable, Z_high_enable, Z_low_enable, PC_enable, IR_enable, Input_port_enable, MAR_enable;
 	 
 	 //enables for 15 GPR
 	 wire R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, R7_enable,
 			R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, R14_enable, R15_enable;
 	 
 	 //data in for MDR
-//	 wire [31:0] MDR_data_in;
+	 wire [31:0] MDR_data_in;
 
 	 //5 bits that go from encoder to mux
 	 wire [4:0] mux_select_signal;
@@ -54,7 +49,7 @@ module datapath(
 	 wire [31:0] ZHigh_data_out;
 	 wire [31:0] ZLow_data_out;
 	 wire [31:0] PC_data_out;
-//	 wire [31:0] MDR_data_out;
+	 wire [31:0] MDR_data_out;
 	 wire [31:0] MAR_data_out;
 	 wire [31:0] InPort_data_out;
 	 wire [31:0] C_sign_extended;
