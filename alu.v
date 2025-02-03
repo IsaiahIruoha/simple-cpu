@@ -98,11 +98,11 @@ module alu(
     div_32bit   u_div   (.Ra(stage1_A), .Rb(stage1_B), .quotient(div_out));
     and_32bit   u_and   (.Ra(stage1_A), .Rb(stage1_B), .Rz(and_out));
     or_32bit    u_or    (.Ra(stage1_A), .Rb(stage1_B), .Rz(or_out));
-    not_32bit   u_not   (.A(stage1_B), .Rz(not_out));
-    negate_32bit u_neg  (.A(stage1_B), .Rz(neg_out));
-    shr_32bit   u_shr   (.A(stage1_A), .B(stage1_B), .Rz(shr_out));
-    shra_32bit  u_shra  (.A(stage1_A), .B(stage1_B), .Rz(shra_out));
-    shl_32bit   u_shl   (.A(stage1_A), .B(stage1_B), .Rz(shl_out));
-    rol_32bit   u_rol   (.A(stage1_A), .B(stage1_B), .Rz(rol_out));
+    not_32bit   u_not   (.Ra(stage1_B), .Rz(not_out));
+    negate_32bit u_neg  (.Ra(stage1_B), .Rz(neg_out));
+    shr_32bit   u_shr   (.Ra(stage1_A), .Rb(stage1_B), .Rz(shr_out));
+    shra_32bit  u_shra  (.Ra(stage1_A), .Rb(stage1_B), .Rz(shra_out));
+    shl_32bit   u_shl   (.Ra(stage1_A), .Rb(stage1_B), .Rz(shl_out));
+    rol_32bit   u_rol   (.Ra(stage1_A), .Rb(stage1_B), .Rz(rol_out));
 
 endmodule
