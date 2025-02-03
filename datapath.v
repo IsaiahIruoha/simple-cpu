@@ -2,9 +2,6 @@
 
 module datapath(
     input  wire clock, clear,
-	 
-	 //used to assert a signal in the encoder, later will be changed
-	 input wire [31:0] encoder_input,
 
 	 
     // The bus output from the mux
@@ -17,6 +14,10 @@ module datapath(
 	 //enables for 15 GPR
 	 wire R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, R7_enable,
 			R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, R14_enable, R15_enable;
+			
+	 // control signals for bus encoder
+	 wire R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11,out, R12out, R13out, R14out, R15out,
+			HIout, LOout, ZHighout, ZLowout, PCout, MDRout, InPortout, Cout;
 	 
 	 //data in for MDR
 	 wire [31:0] MDR_data_in;
@@ -89,7 +90,7 @@ module datapath(
 	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, MDR_data_in, MDR_data_out);
 	 
 	 
-	 encoder_32_to_5 bus_encoder(encoder_input, mux_select_signal);
+	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,R7out,R6out,R5out,R4out,R3out,R2out,R1out,R0out}, mux_select_signal);
 
     // 2) Instantiate the 32-to-1 MUX 
     mux_32_to_1 bus_mux (
