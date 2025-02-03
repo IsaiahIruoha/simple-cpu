@@ -96,8 +96,8 @@ module alu(
   
     add_32bit   u_add   (.Ra(stage1_A), .Rb(stage1_B), .cin({1'd0}), .sum(add_out), .cout(add_carry));
     sub_32bit   u_sub   (.Ra(stage1_A), .Rb(stage1_B), .sum(sub_out), .cout(sub_carry));
-    mul_32bit   u_mul   (.Ra(stage1_A), .Rb(stage1_B), .product(mul_out));
-    div_32bit   u_div   (.Ra(stage1_A), .Rb(stage1_B), .quotient(div_out));
+    mul_32bit   u_mul   (.Ra(stage1_A), .Rb(stage1_B), .Rz(mul_out));
+    div_32bit   u_div   (.Ra(stage1_A), .Rb(stage1_B), .Rz(div_out));
     and_32bit   u_and   (.Ra(stage1_A), .Rb(stage1_B), .Rz(and_out));
     or_32bit    u_or    (.Ra(stage1_A), .Rb(stage1_B), .Rz(or_out));
     not_32bit   u_not   (.Ra(stage1_B), .Rz(not_out));
