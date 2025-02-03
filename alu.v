@@ -9,16 +9,17 @@ module alu(
 
     parameter ADD  = 5'b00011,
               SUB  = 5'b00100,
-              SHR  = 5'b00101, // Logical Shift Right
-              SHL  = 5'b00110, // Shift Left
+              SHR  = 5'b01001, // Logical Shift Right
+              SHL  = 5'b01011, // Shift Left
+				  ROR  = 5'b00111, // Rotate Right
               ROL  = 5'b01000, // Rotate Left
-              AND  = 5'b01001,
-              OR   = 5'b01010,
-              MUL  = 5'b01110,
+              AND  = 5'b00101,
+              OR   = 5'b00110,
+              MUL  = 5'b10000,
               DIV  = 5'b01111,
-              NEG  = 5'b10000, // 2’s complement
-              NOT  = 5'b10001, // bitwise invert
-              SHRA = 5'b10101; // Arithmetic Shift Right
+              NEG  = 5'b10001, // 2’s complement
+              NOT  = 5'b10010, // bitwise invert
+              SHRA = 5'b01010; // Arithmetic Shift Right
 
   
     // Stage 1 registers: holds inputs from the outside
@@ -31,11 +32,11 @@ module alu(
 
     // 3) Wires: Outputs of Combinational Submodules
 
-    wire [31:0] add_out, sub_out;
+    wire [31:0] add_out, sub_out, add_carry, sub_carry;
     wire [31:0] and_out, or_out;
     wire [31:0] not_out, neg_out;
     wire [63:0] mul_out, div_out;
-    wire [31:0] shr_out, shra_out, shl_out, rol_out;
+    wire [31:0] shr_out, shra_out, shl_out, ror_out, rol_out;
 
 
     // 4) Stage 1 (Fetch/Decode): Latch inputs
@@ -72,6 +73,7 @@ module alu(
                 SHR:  stage2_result <= {32'd0, shr_out};
                 SHRA: stage2_result <= {32'd0, shra_out};
                 SHL:  stage2_result <= {32'd0, shl_out};
+					 ROR:  stage2_result <= {32'd0, ror_out};
                 ROL:  stage2_result <= {32'd0, rol_out};
 
                 default: stage2_result <= 64'd0;
@@ -92,8 +94,8 @@ module alu(
     // 7) Instantiate the Combinational Submodules
     //    (driven by stage1_A and stage1_B)
   
-    add_32bit   u_add   (.Ra(stage1_A), .Rb(stage1_B), .sum(add_out));
-    sub_32bit   u_sub   (.Ra(stage1_A), .Rb(stage1_B), .sum(sub_out));
+    add_32bit   u_add   (.Ra(stage1_A), .Rb(stage1_B), .cin({1'd0}), .sum(add_out), .cout(add_carry));
+    sub_32bit   u_sub   (.Ra(stage1_A), .Rb(stage1_B), .sum(sub_out), .cout(sub_carry));
     mul_32bit   u_mul   (.Ra(stage1_A), .Rb(stage1_B), .product(mul_out));
     div_32bit   u_div   (.Ra(stage1_A), .Rb(stage1_B), .quotient(div_out));
     and_32bit   u_and   (.Ra(stage1_A), .Rb(stage1_B), .Rz(and_out));
@@ -103,6 +105,7 @@ module alu(
     shr_32bit   u_shr   (.Ra(stage1_A), .Rb(stage1_B), .Rz(shr_out));
     shra_32bit  u_shra  (.Ra(stage1_A), .Rb(stage1_B), .Rz(shra_out));
     shl_32bit   u_shl   (.Ra(stage1_A), .Rb(stage1_B), .Rz(shl_out));
+	 ror_32bit   u_ror   (.Ra(stage1_A), .Rb(stage1_B), .Rz(ror_out));
     rol_32bit   u_rol   (.Ra(stage1_A), .Rb(stage1_B), .Rz(rol_out));
 
 endmodule
