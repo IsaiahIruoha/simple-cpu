@@ -125,5 +125,7 @@ module datapath(
         // The 5-bit select from encoder
         .mux_select_signal(mux_select_signal)
     );
+	 
+	 alu alu_unit(.clock(clock), .clear(clear), .A_reg(Y_data_out), .B_reg(bus_data), .opcode(), );
 
 endmodule
