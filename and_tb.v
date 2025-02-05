@@ -10,7 +10,7 @@ module and_tb;
  wire [31:0] mdr_data_out;
  wire [4:0] encoder_output;
  reg [31:0] encoder_input;
- wire [31:0] reg3_data;
+ wire [31:0] reg3_data, reg7_data, reg4_data;
 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
  Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
@@ -47,6 +47,8 @@ end
  assign bus_data = DUT.bus_data;
  assign encoder_output = DUT.bus_encoder.encoderOutput;
  assign reg3_data = DUT.R3_data_out;
+ assign reg7_data = DUT.R7_data_out;
+ assign reg4_data = DUT.R4_data_out;
 
 always @(Present_state) begin
     case (Present_state)
@@ -91,12 +93,15 @@ always @(Present_state) begin
         // Load value 0x28 into R4
         Reg_load3a: begin
             Mdatain <= 32'h00000028;
-            Read <= 1; MDRin <= 1;
-            #10 Read <= 0; MDRin <= 0;
+            Read = 0; MDRin = 0;
+            #10 Read <= 1; MDRin <= 1;
+//            #10 Read <= 0; MDRin <= 0;
         end
         Reg_load3b: begin
+            Read <= 0; MDRin <= 0;
+				encoder_input <= 32'h00200000;
             MDRout <= 1; R4in <= 1;
-            #10 MDRout <= 0; R4in <= 0;
+            #20 MDRout <= 0; R4in <= 0;
         end
 
         // Start AND operation (AND R4, R3, R7)
