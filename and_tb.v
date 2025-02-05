@@ -9,8 +9,9 @@ module and_tb;
  wire [31:0] bus_data;
  wire [31:0] mdr_data_out;
  wire [4:0] encoder_output;
- reg [31:0] encoder_input;
+ wire [31:0] encoder_input;
  wire [31:0] reg3_data, reg7_data, reg4_data;
+ reg R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout;
 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
  Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
@@ -19,7 +20,7 @@ parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_loa
  reg [3:0] Present_state = Default;
 
 datapath DUT(PCout, Zlowout, MDRout, R3out, R7out, MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND, R3in,
-R4in, R7in, Clock, Mdatain, operation, encoder_input);
+R4in, R7in, Clock, R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout, Mdatain, operation, encoder_input);
 
 initial begin
     Clock = 0;
@@ -46,6 +47,7 @@ end
  assign mdr_data_out = DUT.mdr_unit.MDRout;
  assign bus_data = DUT.bus_data;
  assign encoder_output = DUT.bus_encoder.encoderOutput;
+ assign encoder_input = DUT.bus_encoder.encoderInput;
  assign reg3_data = DUT.R3_data_out;
  assign reg7_data = DUT.R7_data_out;
  assign reg4_data = DUT.R4_data_out;
@@ -57,51 +59,49 @@ always @(Present_state) begin
             R3out <= 0; R7out <= 0; MARin <= 0; Zin <= 0;
             PCin <= 0; MDRin <= 0; IRin <= 0; Yin <= 0;
             IncPC <= 0; Read <= 0; AND <= 0;
-            R3in <= 0; R4in <= 0; R7in <= 0; 
+            R3in <= 0; R4in <= 0; R7in <= 0;
+				R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
+				R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0;
             Mdatain <= 32'h00000000;
-				encoder_input <= 32'h00000000;
         end
 
         // Load value 0x22 into R3
         Reg_load1a: begin
             Mdatain<= 32'h00000022;
-				Read = 0; MDRin = 0;	
-				#10 Read <= 1; MDRin <= 1;
-//				#15 Read <= 0; MDRin <= 0; 
+//				encoder_input <= 32'h00200000;
+				MDRout <= 1;
+				Read <= 1; MDRin <= 1;				
+				#15 Read <= 0; MDRin <= 0; R3in <= 1;
         end
         Reg_load1b: begin
-				Read = 0; MDRin = 0;
-				encoder_input <= 32'h00200000;
-				MDRout <= 1; R3in <= 1; 
-				#20 MDRout<= 0; R3in <= 0; 
+				R3in = 1; 
+				#5 R3in <= 0; 
         end
 			
         // Load value 0x24 into R7
         Reg_load2a: begin
             Mdatain <= 32'h00000024;
-				Read = 0; MDRin = 0;
-            #10 Read <= 1; MDRin <= 1;
-//            #10 Read <= 0; MDRin <= 0;
+				MDRout <= 1;
+//				encoder_input <= 32'h00200000;
+				Read <= 1; MDRin <= 1;				
+				#15 Read <= 0; MDRin <= 0; R7in <= 1;
         end
         Reg_load2b: begin
-				Read <= 0; MDRin <= 0;
-				encoder_input <= 32'h00200000;
-            MDRout <= 1; R7in <= 1;
-            #20 MDRout <= 0; R7in <= 0;
+				R7in = 1; 
+				#5 R7in <= 0;
         end
 
         // Load value 0x28 into R4
         Reg_load3a: begin
             Mdatain <= 32'h00000028;
-            Read = 0; MDRin = 0;
-            #10 Read <= 1; MDRin <= 1;
-//            #10 Read <= 0; MDRin <= 0;
+				MDRout <= 1;
+//            encoder_input <= 32'h00200000;
+				Read <= 1; MDRin <= 1;				
+				#15 Read <= 0; MDRin <= 0; R4in <= 1;
         end
         Reg_load3b: begin
-            Read <= 0; MDRin <= 0;
-				encoder_input <= 32'h00200000;
-            MDRout <= 1; R4in <= 1;
-            #20 MDRout <= 0; R4in <= 0;
+            R4in = 1; 
+				#5 R4in <= 0;
         end
 
         // Start AND operation (AND R4, R3, R7)

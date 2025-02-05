@@ -13,7 +13,7 @@ mux_2_to_1 md_mux (
     .out(mux_out)
 );
 
-register_32bit #(
+neg_register_32bit #(
     .DATA_WIDTH_IN(32),
     .DATA_WIDTH_OUT(32),
     .INIT(32'h0)
