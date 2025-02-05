@@ -57,30 +57,35 @@ always @(Present_state) begin
             IncPC <= 0; Read <= 0; AND <= 0;
             R3in <= 0; R4in <= 0; R7in <= 0; 
             Mdatain <= 32'h00000000;
+				encoder_input <= 32'h00000000;
         end
 
         // Load value 0x22 into R3
         Reg_load1a: begin
-            Mdatain <= 32'h00000022;
-            Read <= 1; MDRin <= 1; // place value in MDR
-				encoder_input = 32'h00200000; //place on bus
-//            #5 Read <= 0; MDRin <= 0;
+            Mdatain<= 32'h00000022;
+				Read = 0; MDRin = 0;	
+				#10 Read <= 1; MDRin <= 1;
+//				#15 Read <= 0; MDRin <= 0; 
         end
         Reg_load1b: begin
-				R3in <= 1;
-            #10 MDRout <= 0; R3in <= 0;
+				Read = 0; MDRin = 0;
+				encoder_input <= 32'h00200000;
+				MDRout <= 1; R3in <= 1; 
+				#20 MDRout<= 0; R3in <= 0; 
         end
-
+			
         // Load value 0x24 into R7
         Reg_load2a: begin
-				R3in <= 1;
             Mdatain <= 32'h00000024;
-            Read <= 1; MDRin <= 1;
-            #10 Read <= 0; MDRin <= 0;
+				Read = 0; MDRin = 0;
+            #10 Read <= 1; MDRin <= 1;
+//            #10 Read <= 0; MDRin <= 0;
         end
         Reg_load2b: begin
+				Read <= 0; MDRin <= 0;
+				encoder_input <= 32'h00200000;
             MDRout <= 1; R7in <= 1;
-            #10 MDRout <= 0; R7in <= 0;
+            #20 MDRout <= 0; R7in <= 0;
         end
 
         // Load value 0x28 into R4
