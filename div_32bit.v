@@ -1,4 +1,4 @@
-module div_32_bit(
+module div_32bit(
     input signed [31:0] Ra, // Dividend
     input signed [31:0] Rb, // Divisor
     output reg signed [31:0] Rz // Quotient

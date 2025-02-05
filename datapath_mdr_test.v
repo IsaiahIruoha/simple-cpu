@@ -1,30 +1,27 @@
 `timescale 1ns/1ps
 
-module datapath(
-    input  wire PCout, ZLowout, MDRout, R3out, R7out, MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, R3_enable, R4_enable, R7_enable, clock,
+module datapath_mdr_test(
+    input  wire clock, clear,
 	 
-	 input wire[31:0] MDR_data_in,
+	 //used to assert a signal in the encoder, later will be changed
+	 input wire [31:0] encoder_input,
 	 
-	 input wire[4:0] operation,
-	 input wire[31:0] encoder_input
-	 
-    // The bus output from the mux
-//    output wire [31:0] bus_data
+	 input wire MDR_enable, Read,
+	 input wire [31:0] MDR_data_in,
+	 input wire [31:0] MDR_data_out
+    
 );
-	 wire [31:0] bus_data;
 
-	 wire [63:0] c_data_out;
+	// The bus output from the mux
+    wire [31:0] bus_data;
 
 	 // enables for various registers
-	 wire HI_enable, LO_enable, Input_port_enable;
+//	 wire MDR_enable, Read, 
+	 wire Y_enable, HI_enable, LO_enable, Z_high_enable, Z_low_enable, PC_enable, IR_enable, Input_port_enable, MAR_enable;
 	 
-	 //enables for 15 GPR (in)
-	 wire R0_enable, R1_enable, R2_enable, R5_enable, R6_enable,
+	 //enables for 15 GPR
+	 wire R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, R7_enable,
 			R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, R14_enable, R15_enable;
-			
-	 // control signals for bus encoder
-	 wire R0out, R1out, R2out, R4out, R5out, R6out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
-			HIout, LOout, ZHighout, InPortout, Cout;
 	 
 	 //data in for MDR
 //	 wire [31:0] MDR_data_in;
@@ -57,7 +54,7 @@ module datapath(
 	 wire [31:0] ZHigh_data_out;
 	 wire [31:0] ZLow_data_out;
 	 wire [31:0] PC_data_out;
-	 wire [31:0] MDR_data_out;
+//	 wire [31:0] MDR_data_out;
 	 wire [31:0] MAR_data_out;
 	 wire [31:0] InPort_data_out;
 	 wire [31:0] C_sign_extended;
@@ -94,9 +91,9 @@ module datapath(
  
 	 register_32bit MAR_register (clear, clock, MAR_enable, bus_data, MAR_data_out);
 	 
-	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, MDR_data_in, MDR_data_out);
+	 mdr_32bit mdr_unit(.clock(clock), .clear(clear), .MDRin(MDR_enable), .Read(Read), .BusMuxOut(bus_data), .Mdatain(MDR_data_in), .MDRout(MDR_data_out));
 	 
-	 //{{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,R7out,R6out,R5out,R4out,R3out,R2out,R1out,R0out}
+	 
 	 encoder_32_to_5 bus_encoder(encoder_input, mux_select_signal);
 
     // 2) Instantiate the 32-to-1 MUX 
@@ -132,7 +129,5 @@ module datapath(
         // The 5-bit select from encoder
         .mux_select_signal(mux_select_signal)
     );
-	 
-	 alu alu_unit(.clk(clock), .clear(clear), .A_reg(Y_data_out), .B_reg(bus_data), .opcode(operation), .C_reg(c_data_out));
 
 endmodule
