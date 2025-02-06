@@ -106,18 +106,19 @@ always @(Present_state) begin
         Reg_load3b: begin
             R4in = 1; 
 				#5 MDRout<= 0; R4in <= 0;
+				#5 IncPC <= 1;
         end
 
         // Start AND operation (AND R4, R3, R7)
         T0: begin
             PCout <= 1; MARin <= 1; IncPC <= 1; Zin <= 1; MDRout <= 1;
-            #10 PCout <= 0; MARin <= 0; IncPC <= 0; Zin <= 0;
+            #10 PCout <= 0; MARin <= 0; Zin <= 0; PCin <= 1;
         end
 
         T1: begin
             Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
             Mdatain <= 32'h2A2B8000; // opcode for AND R4, R3, R7
-            #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1;
+            #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
         T2: begin
