@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, R3out, R7out, MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, R3_enable, R4_enable, R7_enable, clock,
+    input  wire PCout, ZLowout, MDRout, R3out, R7out, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, R3_enable, R4_enable, R7_enable, clock,
 	 
 	 input wire R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout,
 	 
@@ -82,12 +82,12 @@ module datapath(
 	 register_32bit r14 (clear, clock, R14_enable, bus_data, R14_data_out);
 	 register_32bit r15 (clear, clock, R15_enable, bus_data, R15_data_out);
 	 
-	 register_32bit Y_register (clear, clock, Y_enable, bus_data, Y_data_out);
+	 neg_register_32bit Y_register (clear, clock, Y_enable, bus_data, Y_data_out);
 	 
 	 register_32bit HI_register (clear, clock, HI_enable, bus_data, HI_data_out);
 	 register_32bit LO_register (clear, clock, LO_enable, bus_data, LO_data_out);
-	 register_32bit Z_high_register (clear, clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
-	 register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
+	 neg_register_32bit Z_high_register (clear, clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
+	 neg_register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
 	 
 	 register_32bit PC_register (clear, clock, PC_enable, bus_data, PC_data_out);
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
