@@ -10,7 +10,7 @@ module and_tb;
  wire [31:0] mdr_data_out;
  wire [4:0] encoder_output;
  wire [31:0] encoder_input;
- wire [31:0] reg3_data, reg7_data, reg4_data, IR_data, Y_data, z_low_data, z_high_data;
+ wire [31:0] reg3_data, reg7_data, reg4_data, IR_data, Y_data, z_low_data, z_high_data, PC_data;
  wire [63:0] c_data;
  reg R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout;
 
@@ -57,6 +57,7 @@ end
  assign c_data = DUT.c_data_out;
  assign z_low_data = DUT.ZLow_data_out;
  assign z_high_data = DUT.ZHigh_data_out;
+ assign PC_data = DUT.PC_data_out;
 
 always @(Present_state) begin
     case (Present_state)
@@ -132,7 +133,8 @@ always @(Present_state) begin
 
         T4: begin
             R7out <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
-            #10 R7out <= 0; AND <= 0; Zin <= 0; Zlowout <= 1; R4in <= 1;
+            #10 R7out <= 0; AND <= 0; Zin <= 0;
+				#5 Zlowout <= 1; R4in <= 1;
         end
 
         T5: begin

@@ -89,7 +89,7 @@ module datapath(
 	 neg_register_32bit Z_high_register (clear, clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
 	 neg_register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
 	 
-	 register_32bit PC_register (clear, clock, PC_enable, bus_data, PC_data_out);
+	 PC_register_32bit PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 
 	 register_32bit Input_port_register (clear, clock, Input_port_enable, bus_data, InPort_data_out);
