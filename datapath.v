@@ -86,8 +86,8 @@ module datapath(
 	 
 	 register_32bit HI_register (clear, clock, HI_enable, bus_data, HI_data_out);
 	 register_32bit LO_register (clear, clock, LO_enable, bus_data, LO_data_out);
-	 register_32bit Z_high_register (clear, clock, Z_high_enable, bus_data, ZHigh_data_out);
-	 register_32bit Z_low_register (clear, clock, Z_low_enable, bus_data, ZLow_data_out);
+	 register_32bit Z_high_register (clear, clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
+	 register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
 	 
 	 register_32bit PC_register (clear, clock, PC_enable, bus_data, PC_data_out);
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);

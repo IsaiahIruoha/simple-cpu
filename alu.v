@@ -56,7 +56,7 @@ module alu(
   
     // 5) Stage 2 (Execute): Perform selected ALU operation
 
-    always @(posedge clk or posedge clear) begin
+    always @(clk or clear) begin
         if (clear) begin
             stage2_result <= 64'd0;
         end 
