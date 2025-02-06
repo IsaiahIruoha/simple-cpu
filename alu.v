@@ -34,90 +34,59 @@ module alu(
             C_reg = 64'd0;
         end
         else begin
-            // Default result
-            C_reg = 64'd0;
-
-            // Select operation based on opcode
-            case (opcode)
-
-                // 32-bit add
-                ADD:  begin
+            C_reg = 64'd0; // Default result
+		case (opcode) // Select operation based on opcode
+                ADD:  begin // 32-bit add
                     C_reg[31:0]   = add_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // 32-bit subtract
-                SUB:  begin
+                SUB:  begin // 32-bit subtract
                     C_reg[31:0]   = sub_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // 64-bit multiply
-                MUL:  begin
+                MUL:  begin // 64-bit multiply
                     C_reg = mul_out; 
                 end
-
-                // 64-bit divide
-                DIV:  begin
+                DIV:  begin // 64-bit divide
                     C_reg = div_out; 
                 end
-
-                // Logical AND
-                AND:  begin
+                AND:  begin // Logical AND
                     C_reg[31:0]   = and_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Logical OR
-                OR:   begin
+                OR:   begin // Logical OR
                     C_reg[31:0]   = or_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // 2's complement
-                NEG:  begin
+                NEG:  begin // 2's complement
                     C_reg[31:0]   = neg_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Bitwise invert
-                NOT:  begin
+                NOT:  begin // Bitwise invert
                     C_reg[31:0]   = not_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Shift Right (logical)
-                SHR:  begin
+                SHR:  begin // Shift Right (logical)
                     C_reg[31:0]   = shr_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Shift Right (arithmetic)
-                SHRA: begin
+                SHRA: begin // Shift Right (arithmetic)
                     C_reg[31:0]   = shra_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Shift Left
-                SHL:  begin
+                SHL:  begin // Shift Left
                     C_reg[31:0]   = shl_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Rotate Right
-                ROR:  begin
+                ROR:  begin // Rotate Right
                     C_reg[31:0]   = ror_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Rotate Left
-                ROL:  begin
+                ROL:  begin // Rotate Left
                     C_reg[31:0]   = rol_out;
                     C_reg[63:32] = 32'd0;
                 end
-
-                // Default
-                default: begin
+                default: begin // Default
                     C_reg = 64'd0;
                 end
             endcase
