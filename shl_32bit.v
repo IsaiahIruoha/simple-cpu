@@ -4,7 +4,6 @@ module shl_32bit(
     output wire [31:0] Rz         // Output after shift
 );
 
-    // Logical shift left (fills rightmost bits with 0)
-    assign Rz = Ra << Rb[4:0];
+    assign Rz = Ra << Rb;
 
 endmodule

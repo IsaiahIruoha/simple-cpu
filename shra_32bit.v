@@ -4,7 +4,6 @@ module shra_32bit(
     output wire [31:0] Rz         // Output after shift
 );
 
-    // Signed arithmetic right shift (>>> preserves MSB for signed numbers)
-    assign Rz = $signed(Ra) >>> Rb[4:0];
+    assign Rz = $signed(Ra) >>> Rb;
 
 endmodule
