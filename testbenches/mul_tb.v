@@ -106,9 +106,9 @@ always @(Present_state) begin
         end
 
         T1: begin
-            Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
+            PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
             Mdatain <= 32'h2A2B8000;
-            #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
+            #10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
         T2: begin

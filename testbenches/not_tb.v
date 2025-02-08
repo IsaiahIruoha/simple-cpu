@@ -85,19 +85,19 @@ always @(Present_state) begin
 
         // Start not operation (not R5, R0)
         T0: begin
-            PCout <= 1; MARin <= 1; IncPC <= 1; MDRout <= 1;
+            PCout <= 1; MARin <= 1; IncPC <= 1;
             #10 PCout <= 0; MARin <= 0; PCin <= 1;
         end
 
         T1: begin
-            Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
+            PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
             Mdatain <= 32'h2A2B8000; 
-            #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
+            #10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
         T2: begin
-            MDRout <= 1; IRin <= 1; 
-            #10 MDRout <= 0; IRin <= 0; 
+            IRin <= 1; MDRout <= 0;
+            #10 IRin <= 0; 
         end
 
         T4: begin
