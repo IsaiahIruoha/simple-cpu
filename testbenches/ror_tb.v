@@ -68,46 +68,46 @@ always @(Present_state) begin
             PCin <= 0; MDRin <= 0; IRin <= 0; Yin <= 0;
             IncPC <= 0; Read <= 0; AND <= 0;
             R3in <= 0; R4in <= 0; R7in <= 0;
-	    R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
-	    R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0;
+				R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
+				R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0;
             Mdatain <= 32'h00000000;
         end
 
         // Load value 0x22 into R3
         Reg_load1a: begin
-                Mdatain<= 32'h00000022;
-	        MDRout <= 1;
-		Read <= 1; MDRin <= 1;				
-		#15 Read <= 0; MDRin <= 0; R3in <= 1;
+            Mdatain<= 32'h00000022;
+	         MDRout <= 1;
+				Read <= 1; MDRin <= 1;				
+				#15 Read <= 0; MDRin <= 0; R3in <= 1;
         end
         Reg_load1b: begin
-		R3in = 1; 
-		#5 MDRout<= 0; R3in <= 0; 
+				R3in = 1; 
+				#5 MDRout<= 0; R3in <= 0; 
         end
 			
         // Load value 0x24 into R7
         Reg_load2a: begin
-                Mdatain <= 32'h00000024;
-		MDRout <= 1;
-		Read <= 1; MDRin <= 1;				
-		#15 Read <= 0; MDRin <= 0; R7in <= 1;
+            Mdatain <= 32'h00000024;
+				MDRout <= 1;
+				Read <= 1; MDRin <= 1;				
+				#15 Read <= 0; MDRin <= 0; R7in <= 1;
         end
         Reg_load2b: begin
-		R7in = 1; 
-		#5 MDRout <= 0; R7in <= 0;
+				R7in = 1; 
+				#5 MDRout <= 0; R7in <= 0;
         end
 
         // Load value 0x28 into R4
         Reg_load3a: begin
-                Mdatain <= 32'h00000028;
-		MDRout <= 1;
-		Read <= 1; MDRin <= 1;				
-		#15 Read <= 0; MDRin <= 0; R4in <= 1;
+            Mdatain <= 32'h00000028;
+				MDRout <= 1;
+				Read <= 1; MDRin <= 1;				
+				#15 Read <= 0; MDRin <= 0; R4in <= 1;
         end
         Reg_load3b: begin
-                R4in = 1; 
-		#5 MDRout<= 0; R4in <= 0;
-		#5 IncPC <= 1;
+            R4in = 1; 
+				#5 MDRout<= 0; R4in <= 0;
+				#5 IncPC <= 1;
         end
 
         // Start AND operation (AND R4, R3, R7)
@@ -117,9 +117,9 @@ always @(Present_state) begin
         end
 
         T1: begin
-            Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
+            PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
             Mdatain <= 32'h2A2B8000; // opcode for AND R4, R3, R7
-            #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
+            #10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
         T2: begin
@@ -129,14 +129,14 @@ always @(Present_state) begin
 
         T3: begin
             R3out <= 1; 
-	    #5 Yin <= 1;
-	    #10 Yin <= 0; R3out <= 0;
+				#5 Yin <= 1;
+				#10 Yin <= 0; R3out <= 0;
         end
 
         T4: begin
             R7out <= 1; AND <= 1; Zin <= 1; operation <= 5'b00111;
             #10 R7out <= 0; AND <= 0; Zin <= 0;
-	    #5 Zlowout <= 1; R4in <= 1;
+				#5 Zlowout <= 1; R4in <= 1;
         end
 
         T5: begin

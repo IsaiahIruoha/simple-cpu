@@ -69,8 +69,8 @@ always @(Present_state) begin
             IncPC <= 0; Read <= 0; AND <= 0;
             R2in <= 0; R6in <= 0;
 				LOin <= 0; HIin <=0;
-	    R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
-	    R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0;
+				R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
+				R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0;
             Mdatain <= 32'h00000000;
         end
 
@@ -106,9 +106,9 @@ always @(Present_state) begin
         end
 
         T1: begin
-            Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
+            PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
             Mdatain <= 32'h2A2B8000;
-            #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
+            #10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
         T2: begin
