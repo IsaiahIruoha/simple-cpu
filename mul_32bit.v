@@ -8,6 +8,8 @@ module mul_32bit (
     reg  signed [32:0] negMultiplicand; // -A (2's complement)
     reg  signed [63:0] partialProduct; 
     reg  signed [63:0] product;
+	 reg [2:0] bits;              
+    reg signed [33:0] recodedVal;
     integer i;
 
     always @(*) begin
@@ -20,8 +22,7 @@ module mul_32bit (
         // We'll generate 16 partial products, each shifted by 2*i bits.
 
         for (i = 0; i < 16; i = i + 1) begin
-            reg [2:0] bits;              
-            reg signed [33:0] recodedVal; 
+             
             
             // Gather the 3 bits for this pair
             if (i == 0)

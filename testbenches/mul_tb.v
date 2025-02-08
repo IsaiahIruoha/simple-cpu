@@ -76,7 +76,7 @@ always @(Present_state) begin
 
         // Load value 0x22 into R2
         Reg_load1a: begin
-            Mdatain<= 32'hFF000022;
+            Mdatain<= 32'h7F000022;
 				MDRout <= 1;
 			   Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R2in <= 1;
@@ -88,7 +88,7 @@ always @(Present_state) begin
 			
         // Load value 0x24 into R6
         Reg_load2a: begin
-            Mdatain <= 32'hFF00024;
+            Mdatain <= 32'h7F000024;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R6in <= 1;
