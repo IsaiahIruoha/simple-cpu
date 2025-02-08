@@ -37,5 +37,5 @@ module PC_register_32bit(
         else
             nextPC_in = external_val;   // some external load value
     end
-    assign PC_out = currentPC; / The register output is our PC
+    assign PC_out = currentPC; // The register output is our PC
 endmodule
