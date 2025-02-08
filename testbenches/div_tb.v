@@ -76,7 +76,7 @@ always @(Present_state) begin
 
         // Load value 0x22 into R2
         Reg_load1a: begin
-            Mdatain<= 32'h00000022;
+            Mdatain<= 32'h00000024;
 				MDRout <= 1;
 			   Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R2in <= 1;
@@ -88,7 +88,7 @@ always @(Present_state) begin
 			
         // Load value 0x24 into R6
         Reg_load2a: begin
-            Mdatain <= 32'h00000024;
+            Mdatain <= 32'h00000022;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R6in <= 1;
@@ -123,8 +123,8 @@ always @(Present_state) begin
         end
 
         T4: begin
-            R6out <= 1; AND <= 1; Zlowin <= 1; operation <= 5'b01111;
-            #10 R6out <= 0; AND <= 0; Zlowin <= 0;
+            R6out <= 1; AND <= 1; Zlowin <= 1; Zhighin <= 1; operation <= 5'b01111;
+            #10 R6out <= 0; AND <= 0; Zlowin <= 0; Zhighin <= 0;
 				#5 Zlowout <= 1; LOin <= 1;
         end
 
