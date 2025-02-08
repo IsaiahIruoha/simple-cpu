@@ -110,7 +110,7 @@ always @(Present_state) begin
 		#5 IncPC <= 1;
         end
 
-        // Start AND operation (AND R4, R3, R7)
+        // Start ROL operation (ROL R4, R3, R7)
         T0: begin
             PCout <= 1; MARin <= 1; IncPC <= 1; Zin <= 1; MDRout <= 1;
             #10 PCout <= 0; MARin <= 0; Zin <= 0; PCin <= 1;

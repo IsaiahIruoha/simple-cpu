@@ -109,7 +109,7 @@ always @(Present_state) begin
 		#5 IncPC <= 1;
         end
 
-        // Start AND operation (AND R4, R3, R7)
+        // Start OR operation (OR R4, R3, R7)
         T0: begin
             PCout <= 1; MARin <= 1; IncPC <= 1; Zin <= 1; MDRout <= 1;
             #10 PCout <= 0; MARin <= 0; Zin <= 0; PCin <= 1;
@@ -117,7 +117,7 @@ always @(Present_state) begin
 
         T1: begin
             Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
-            Mdatain <= 32'h2A2B8000; // opcode for AND R4, R3, R7
+            Mdatain <= 32'h2A2B8000;
             #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 

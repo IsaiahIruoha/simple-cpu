@@ -35,9 +35,7 @@ always @(posedge Clock) begin
         Reg_load1a :  Present_state = Reg_load1b;
         Reg_load1b :  Present_state = Reg_load2a;
         Reg_load2a :  Present_state = Reg_load2b;
-        Reg_load2b :  Present_state = Reg_load3a;
-        Reg_load3a :  Present_state = Reg_load3b;
-        Reg_load3b :  Present_state = T0;
+        Reg_load2b :  Present_state = T0;
         T0 :  Present_state = T1;
         T1 :  Present_state = T2;
         T2 :  Present_state = T3;
@@ -98,21 +96,10 @@ always @(Present_state) begin
         Reg_load2b: begin
 				R6in = 1; 
 				#5 MDRout <= 0; R6in <= 0;
-        end
-
-        // Load value 0x28 into R4
-        Reg_load3a: begin
-            Mdatain <= 32'h00000028;
-				MDRout <= 1;
-				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0;
-        end
-        Reg_load3b: begin
-				#5 MDRout<= 0;
 				#5 IncPC <= 1;
         end
 
-        // Start mul operation (mul R2, R6)
+        // Start DIV operation (DIV R2, R6)
         T0: begin
             PCout <= 1; MARin <= 1; IncPC <= 1; MDRout <= 1;
             #10 PCout <= 0; MARin <= 0; PCin <= 1;
@@ -120,7 +107,7 @@ always @(Present_state) begin
 
         T1: begin
             Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
-            Mdatain <= 32'h2A2B8000; // opcode for AND R4, R3, R7
+            Mdatain <= 32'h2A2B8000;
             #10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
