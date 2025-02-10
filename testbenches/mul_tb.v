@@ -4,7 +4,7 @@ module mul_tb;
  reg PCout, Zlowout, Zhighout, MDRout, R2out, R6out;
  reg MARin, Zlowin, Zhighin, PCin, MDRin, IRin, Yin;
  reg IncPC, Read, AND, R2in, R6in, LOin, HIin;
- reg Clock;
+ reg Clock, clear;
  reg [31:0] Mdatain;
  reg [4:0] operation;
  wire [31:0] bus_data;
@@ -22,10 +22,11 @@ T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b11
 reg [3:0] Present_state = Default;
 
 datapath_2reg DUT(PCout, Zlowout, Zhighout, MDRout, R2out, R6out, MARin, Zlowin, Zhighin, PCin, MDRin, IRin, Yin, IncPC, Read, AND, R2in,
-R6in, LOin, HIin, Clock, R0out,R1out,R3out,R4out,R5out,R7out,R8out,R9out,R10out,R11out,R12out,R13out,R14out,R15out,LOout,HIout,Cout,InPortout, Mdatain, operation, encoder_input);
+R6in, LOin, HIin, Clock, clear, R0out,R1out,R3out,R4out,R5out,R7out,R8out,R9out,R10out,R11out,R12out,R13out,R14out,R15out,LOout,HIout,Cout,InPortout, Mdatain, operation, encoder_input);
 
 initial begin
     Clock = 0;
+	 clear =0;
     forever #10 Clock = ~Clock;
 end
 
@@ -70,13 +71,13 @@ always @(Present_state) begin
             R2in <= 0; R6in <= 0;
 				LOin <= 0; HIin <=0;
 				R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
-				R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0;
+				R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
         end
 
         // Load value 0x22 into R2
         Reg_load1a: begin
-            Mdatain<= 32'h7F000022;
+            Mdatain<= 32'hFFFFFFFE;
 				MDRout <= 1;
 			   Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R2in <= 1;
@@ -88,7 +89,7 @@ always @(Present_state) begin
 			
         // Load value 0x24 into R6
         Reg_load2a: begin
-            Mdatain <= 32'h7F000024;
+            Mdatain <= 32'h00000002;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R6in <= 1;
@@ -112,8 +113,8 @@ always @(Present_state) begin
         end
 
         T2: begin
-            MDRout <= 1; IRin <= 1; 
-            #10 MDRout <= 0; IRin <= 0; 
+            MDRout <= 1; IRin <= 1;
+            #10 MDRout <= 0; IRin <= 0;
         end
 
         T3: begin

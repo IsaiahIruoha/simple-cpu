@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module datapath_2reg(
-    input  wire PCout, ZLowout, ZHighout, MDRout, R2out, R6out, MAR_enable, Z_low_enable, Z_high_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, R2_enable, R6_enable, LO_enable, HI_enable, clock,
+    input  wire PCout, ZLowout, ZHighout, MDRout, R2out, R6out, MAR_enable, Z_low_enable, Z_high_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, R2_enable, R6_enable, LO_enable, HI_enable, clock, clear,
     input wire R0out,R1out,R3out,R4out,R5out,R7out,R8out,R9out,R10out,R11out,R12out,R13out,R14out,R15out,LOout,HIout,Cout,InPortout,
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
