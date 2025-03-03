@@ -26,7 +26,7 @@ reg [3:0] Present_state = Default;
 
 datapath DUT(PCout, Zlowout, MDRout,MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND,Clock,ZHighout,LOout,HIout,Cout,InPortout, 
 GRA, GRB, GRC, Rin, Rout, BAout,
-Mdatain, operation, encoder_input, RinSignals, RoutSignals);
+Mdatain, operation, encoder_input);
 
 initial begin
     Clock = 0;
@@ -64,6 +64,8 @@ end
  assign z_high_data = DUT.ZHigh_data_out;
  assign PC_data = DUT.PC_data_out;
  assign decoder_output = DUT.ir_encode.decoder.decoderOutput;
+ assign RinSignals = DUT.RinSignals;
+ assign RoutSignals = DUT.RoutSignals;
 
 always @(Present_state) begin
     case (Present_state)
@@ -74,7 +76,7 @@ always @(Present_state) begin
             IncPC <= 0; Read <= 0; AND <= 0;
 				Rin <= 0; Rout <= 0;
 				GRA <= 0; GRB <= 0; GRC <= 0; BAout <= 0;
-				RinSignals <= 16'd0; RoutSignals <= 16'd0;
+//				RinSignals <= 16'd0; RoutSignals <= 16'd0;
 				HIout <= 0; LOout <= 0; ZHighout <= 0;
 				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
@@ -141,13 +143,13 @@ always @(Present_state) begin
         end
 
         T4: begin
-            RoutSignals[7] <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
-            #10 RoutSignals[7] <= 0; AND <= 0; Zin <= 0;
-				#5 Zlowout <= 1; RinSignals[4] <= 1;
+            Rout <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
+            #10 Rout <= 0; AND <= 0; Zin <= 0;
+				#5 Zlowout <= 1; Rin <= 1;
         end
 
         T5: begin
-            #10 Zlowout <= 0; RinSignals[4] <= 0;
+            #10 Zlowout <= 0; Rin <= 0;
         end
     endcase
    end

@@ -6,13 +6,13 @@ module datapath(
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout,
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
-    input wire[31:0] encoder_input,
-	 input wire [15:0] RinSignals, RoutSignals
+    input wire[31:0] encoder_input
+
 );
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
 	 
-	 
+	 wire [15:0] RinSignals, RoutSignals;
 
 	 // enables for various registers
 	 wire HI_enable, LO_enable, Input_port_enable;
