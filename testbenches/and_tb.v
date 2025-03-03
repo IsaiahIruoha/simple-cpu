@@ -1,9 +1,9 @@
 `timescale 1ns/10ps
 
 module and_tb;
- reg PCout, Zlowout, MDRout, R3out, R7out;
+ reg PCout, Zlowout, MDRout;
  reg MARin, Zin, PCin, MDRin, IRin, Yin;
- reg IncPC, Read, AND, R3in, R4in, R7in;
+ reg IncPC, Read, AND;
  reg Clock;
  reg [31:0] Mdatain;
  reg [4:0] operation;
@@ -13,16 +13,20 @@ module and_tb;
  wire [31:0] encoder_input;
  wire [31:0] reg3_data, reg7_data, reg4_data, IR_data, Y_data, z_low_data, z_high_data, PC_data;
  wire [63:0] c_data;
- reg R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout;
-
+ reg ZHighout,LOout,HIout,Cout,InPortout;
+ reg GRA, GRB, GRC, Rin, Rout, BAout;
+ reg [15:0] RinSignals, RoutSignals;
+ wire [15:0] decoder_output;
+ 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
 T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100;
  
 reg [3:0] Present_state = Default;
 
-datapath DUT(PCout, Zlowout, MDRout, R3out, R7out, MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND, R3in,
-R4in, R7in, Clock, R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout, Mdatain, operation, encoder_input);
+datapath DUT(PCout, Zlowout, MDRout,MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND,Clock,ZHighout,LOout,HIout,Cout,InPortout, 
+GRA, GRB, GRC, Rin, Rout, BAout,
+Mdatain, operation, encoder_input, RinSignals, RoutSignals);
 
 initial begin
     Clock = 0;
@@ -59,17 +63,20 @@ end
  assign z_low_data = DUT.ZLow_data_out;
  assign z_high_data = DUT.ZHigh_data_out;
  assign PC_data = DUT.PC_data_out;
+ assign decoder_output = DUT.ir_encode.decoder.decoderOutput;
 
 always @(Present_state) begin
     case (Present_state)
         Default: begin
             PCout <= 0; Zlowout <= 0; MDRout <= 0;
-            R3out <= 0; R7out <= 0; MARin <= 0; Zin <= 0;
+            MARin <= 0; Zin <= 0;
             PCin <= 0; MDRin <= 0; IRin <= 0; Yin <= 0;
             IncPC <= 0; Read <= 0; AND <= 0;
-            R3in <= 0; R4in <= 0; R7in <= 0;
-				R2out <= 0;R1out<= 0;R0out<= 0;R6out<= 0;R5out<= 0;R4out<= 0;ZHighout<= 0;LOout<= 0;HIout<= 0;R15out<= 0;
-				R14out<= 0;R13out<= 0;R12out<= 0;R11out<= 0;R10out<= 0;R9out<= 0;R8out<= 0;Cout<= 0;InPortout<= 0; operation <= 5'b00000;
+				Rin <= 0; Rout <= 0;
+				GRA <= 0; GRB <= 0; GRC <= 0; BAout <= 0;
+				RinSignals <= 16'd0; RoutSignals <= 16'd0;
+				HIout <= 0; LOout <= 0; ZHighout <= 0;
+				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
         end
 
@@ -78,11 +85,11 @@ always @(Present_state) begin
             Mdatain<= 32'h00000022;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0; R3in <= 1;
+				#15 Read <= 0; MDRin <= 0; RinSignals[3] <= 1;
         end
         Reg_load1b: begin
-				R3in = 1; 
-				#5 MDRout<= 0; R3in <= 0; 
+				RinSignals[3] = 1; 
+				#5 MDRout<= 0; RinSignals[3] <= 0; 
         end
 			
         // Load value 0x24 into R7
@@ -90,11 +97,11 @@ always @(Present_state) begin
             Mdatain <= 32'h00000024;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0; R7in <= 1;
+				#15 Read <= 0; MDRin <= 0; RinSignals[7] <= 1;
         end
         Reg_load2b: begin
-				R7in = 1; 
-				#5 MDRout <= 0; R7in <= 0;
+				RinSignals[7] = 1; 
+				#5 MDRout <= 0; RinSignals[7] <= 0;
         end
 
         // Load value 0x28 into R4
@@ -102,11 +109,11 @@ always @(Present_state) begin
             Mdatain <= 32'h00000028;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0; R4in <= 1;
+				#15 Read <= 0; MDRin <= 0; RinSignals[4] <= 1;
         end
         Reg_load3b: begin
-            R4in = 1; 
-				#5 MDRout<= 0; R4in <= 0;
+            RinSignals[4] = 1; 
+				#5 MDRout<= 0; RinSignals[4] <= 0;
 				#5 IncPC <= 1;
         end
 
@@ -118,29 +125,29 @@ always @(Present_state) begin
 
         T1: begin
             PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
-            Mdatain <= 32'h2A2B8000; // opcode for AND R4, R3, R7
+            Mdatain <= 32'h2A1B8000; // opcode for AND R4, R3, R7
             #10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
 
         T2: begin
             MDRout <= 1; IRin <= 1; 
-            #10 MDRout <= 0; IRin <= 0; 
+            #10 MDRout <= 0; IRin <= 0; GRA <= 1; Rout <= 1;
         end
 
         T3: begin
-            R3out <= 1; 
+				 // for R3
 				#5 Yin <= 1;
-				#10 Yin <= 0; R3out <= 0;
+				#10 Yin <= 0; GRB <= 0; Rout <= 0;
         end
 
         T4: begin
-            R7out <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
-            #10 R7out <= 0; AND <= 0; Zin <= 0;
-				#5 Zlowout <= 1; R4in <= 1;
+            RoutSignals[7] <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
+            #10 RoutSignals[7] <= 0; AND <= 0; Zin <= 0;
+				#5 Zlowout <= 1; RinSignals[4] <= 1;
         end
 
         T5: begin
-            #10 Zlowout <= 0; R4in <= 0;
+            #10 Zlowout <= 0; RinSignals[4] <= 0;
         end
     endcase
    end

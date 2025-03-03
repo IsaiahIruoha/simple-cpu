@@ -6,12 +6,13 @@ module datapath(
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout,
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
-    input wire[31:0] encoder_input
+    input wire[31:0] encoder_input,
+	 input wire [15:0] RinSignals, RoutSignals
 );
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
 	 
-	 wire [15:0] RinSignals, RoutSignals;
+	 
 
 	 // enables for various registers
 	 wire HI_enable, LO_enable, Input_port_enable;
@@ -87,7 +88,7 @@ module datapath(
 	
 	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,RoutSignals}, mux_select_signal);
 
-    // Instantiate the 32-to-1 MUX 
+    // Instantiate the 32-to-1 MUX
     mux_32_to_1 bus_mux (
         .BusMuxIn_R0      (R0_data_out),
         .BusMuxIn_R1      (R1_data_out),
