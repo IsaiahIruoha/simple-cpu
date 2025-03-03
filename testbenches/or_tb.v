@@ -133,8 +133,8 @@ always @(Present_state) begin
         end
 
         T4: begin
-            R7out <= 1; OR <= 1; Zin <= 1; operation <= 5'b00110;
-            #10 R7out <= 0; OR <= 0; Zin <= 0;
+            R7out <= 1; AND <= 1; Zin <= 1; operation <= 5'b00110;
+            #10 R7out <= 0; AND <= 0; Zin <= 0;
 				#5 Zlowout <= 1; R4in <= 1;
         end
 

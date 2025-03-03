@@ -22,7 +22,7 @@ T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b11
 reg [3:0] Present_state = Default;
 
 datapath_2reg DUT(PCout, Zlowout, Zhighout, MDRout, R2out, R6out, MARin, Zlowin, Zhighin, PCin, MDRin, IRin, Yin, IncPC, Read, AND, R2in,
-R6in, LOin, HIin, Clock, R0out,R1out,R3out,R4out,R5out,R7out,R8out,R9out,R10out,R11out,R12out,R13out,R14out,R15out,LOout,HIout,Cout,InPortout, Mdatain, operation, encoder_input);
+R6in, LOin, HIin, Clock, clear, R0out,R1out,R3out,R4out,R5out,R7out,R8out,R9out,R10out,R11out,R12out,R13out,R14out,R15out,LOout,HIout,Cout,InPortout, Mdatain, operation, encoder_input);
 
 initial begin
     Clock = 0;
@@ -76,7 +76,7 @@ always @(Present_state) begin
 
         // Load value 0x22 into R2
         Reg_load1a: begin
-            Mdatain<= 32'h00000024;
+            Mdatain<= 32'h80000024;
 				MDRout <= 1;
 			   Read <= 1; MDRin <= 1;				
 				#15 Read <= 0; MDRin <= 0; R2in <= 1;
