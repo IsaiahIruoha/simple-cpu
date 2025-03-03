@@ -1,21 +1,20 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, R3out, R7out, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, R3_enable, R4_enable, R7_enable, clock,
-    input wire R2out,R1out,R0out,R6out,R5out,R4out,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,Cout,InPortout,
+    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, clock,
+    input wire ZHighout,LOout,HIout,Cout,InPortout,
+	 input wire GRA, GRB, GRC, Rin, Rout, BAout,
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
     input wire[31:0] encoder_input
 );
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
+	 
+	 wire [15:0] RinSignals, RoutSignals;
 
 	 // enables for various registers
 	 wire HI_enable, LO_enable, Input_port_enable;
-	 
-	 //enables for 15 GPR (in)
-	 wire R0_enable, R1_enable, R2_enable, R5_enable, R6_enable,
-	 R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, R14_enable, R15_enable;
 
 	 //5 bits that go from encoder to mux
 	 wire [4:0] mux_select_signal;
@@ -51,22 +50,22 @@ module datapath(
 	 wire [31:0] C_sign_extended;
 
     // Instantiate 32-bit registers
-         register_32bit r0 (clear, clock, R0_enable, bus_data, R0_data_out);
-	 register_32bit r1 (clear, clock, R1_enable, bus_data, R1_data_out);
-	 register_32bit r2 (clear, clock, R2_enable, bus_data, R2_data_out);
-	 register_32bit r3 (clear, clock, R3_enable, bus_data, R3_data_out);
-	 register_32bit r4 (clear, clock, R4_enable, bus_data, R4_data_out);
-	 register_32bit r5 (clear, clock, R5_enable, bus_data, R5_data_out);
-	 register_32bit r6 (clear, clock, R6_enable, bus_data, R6_data_out);
-	 register_32bit r7 (clear, clock, R7_enable, bus_data, R7_data_out);
-	 register_32bit r8 (clear, clock, R8_enable, bus_data, R8_data_out);
-	 register_32bit r9 (clear, clock, R9_enable, bus_data, R9_data_out);
-	 register_32bit r10 (clear, clock, R10_enable, bus_data, R10_data_out);
-	 register_32bit r11 (clear, clock, R11_enable, bus_data, R11_data_out);
-	 register_32bit r12 (clear, clock, R12_enable, bus_data, R12_data_out);
-	 register_32bit r13 (clear, clock, R13_enable, bus_data, R13_data_out);
-	 register_32bit r14 (clear, clock, R14_enable, bus_data, R14_data_out);
-	 register_32bit r15 (clear, clock, R15_enable, bus_data, R15_data_out);
+         register_32bit r0 (clear, clock, RinSignals[0], bus_data, R0_data_out);
+	 register_32bit r1 (clear, clock, RinSignals[1], bus_data, R1_data_out);
+	 register_32bit r2 (clear, clock, RinSignals[2], bus_data, R2_data_out);
+	 register_32bit r3 (clear, clock, RinSignals[3], bus_data, R3_data_out);
+	 register_32bit r4 (clear, clock, RinSignals[4], bus_data, R4_data_out);
+	 register_32bit r5 (clear, clock, RinSignals[5], bus_data, R5_data_out);
+	 register_32bit r6 (clear, clock, RinSignals[6], bus_data, R6_data_out);
+	 register_32bit r7 (clear, clock, RinSignals[7], bus_data, R7_data_out);
+	 register_32bit r8 (clear, clock, RinSignals[8], bus_data, R8_data_out);
+	 register_32bit r9 (clear, clock, RinSignals[9], bus_data, R9_data_out);
+	 register_32bit r10 (clear, clock, RinSignals[10], bus_data, R10_data_out);
+	 register_32bit r11 (clear, clock, RinSignals[11], bus_data, R11_data_out);
+	 register_32bit r12 (clear, clock, RinSignals[12], bus_data, R12_data_out);
+	 register_32bit r13 (clear, clock, RinSignals[13], bus_data, R13_data_out);
+	 register_32bit r14 (clear, clock, RinSignals[14], bus_data, R14_data_out);
+	 register_32bit r15 (clear, clock, RinSignals[15], bus_data, R15_data_out);
 	 
 	 neg_register_32bit Y_register (clear, clock, Y_enable, bus_data, Y_data_out);
 	 
@@ -78,13 +77,15 @@ module datapath(
 	 PC_register_32bit PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 
+	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, RinSignals, RoutSignals, C_sign_extended);
+	 
 	 register_32bit Input_port_register (clear, clock, Input_port_enable, bus_data, InPort_data_out);
  
 	 register_32bit MAR_register (clear, clock, MAR_enable, bus_data, MAR_data_out);
 	 
 	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, MDR_data_in, MDR_data_out);
 	
-	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,R15out,R14out,R13out,R12out,R11out,R10out,R9out,R8out,R7out,R6out,R5out,R4out,R3out,R2out,R1out,R0out}, mux_select_signal);
+	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,RoutSignals}, mux_select_signal);
 
     // Instantiate the 32-to-1 MUX 
     mux_32_to_1 bus_mux (
