@@ -14,9 +14,11 @@ module select_encode_ir(
 	decoder_4_to_16 decoder(decoderInput, decoderOutput);
 
 	assign C_sign_extended = {{13{IR[18]}},IR[18:0]};
+	
+	assign RoutSignals = ({16{Rout}} | {16{BAout}}) & decoderOutput;
 
 	assign RinSignals = {16{Rin}} & decoderOutput;
 
-	assign RoutSignals = ({16{Rout}} | {16{BAout}}) & decoderOutput;
+	
 
 endmodule

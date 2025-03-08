@@ -6,13 +6,26 @@ module datapath(
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout,
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
-    input wire[31:0] encoder_input
-
+    input wire[31:0] encoder_input,
+	 input wire[15:0] register_enable_signals,
+	 input wire[15:0] ir_enable_signals,
+	 input wire[15:0] ir_output_signals
 );
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
 	 
-	 wire [15:0] RinSignals, RoutSignals;
+	 reg [15:0] RinSignals, RoutSignals;
+	 
+	 always@(*)begin		
+			if (ir_enable_signals)
+				RinSignals<=ir_enable_signals;
+			else
+				RinSignals<=register_enable_signals;
+			if (ir_output_signals)
+				RoutSignals<=ir_output_signals;
+			else
+				RoutSignals<=16'b0;
+	 end 
 
 	 // enables for various registers
 	 wire HI_enable, LO_enable, Input_port_enable;
@@ -78,7 +91,7 @@ module datapath(
 	 PC_register_32bit PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 
-	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, RinSignals, RoutSignals, C_sign_extended);
+	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
 	 
 	 register_32bit Input_port_register (clear, clock, Input_port_enable, bus_data, InPort_data_out);
  

@@ -15,7 +15,7 @@ module and_tb;
  wire [63:0] c_data;
  reg ZHighout,LOout,HIout,Cout,InPortout;
  reg GRA, GRB, GRC, Rin, Rout, BAout;
- reg [15:0] RinSignals, RoutSignals;
+ reg [15:0] Register_enable_Signals, RoutSignals, ir_enable_signals, ir_output_signals;
  wire [15:0] decoder_output;
  
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -26,7 +26,7 @@ reg [3:0] Present_state = Default;
 
 datapath DUT(PCout, Zlowout, MDRout,MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND,Clock,ZHighout,LOout,HIout,Cout,InPortout, 
 GRA, GRB, GRC, Rin, Rout, BAout,
-Mdatain, operation, encoder_input);
+Mdatain, operation, encoder_input, Register_enable_Signals, ir_enable_signals, ir_output_signals);
 
 initial begin
     Clock = 0;
@@ -64,8 +64,6 @@ end
  assign z_high_data = DUT.ZHigh_data_out;
  assign PC_data = DUT.PC_data_out;
  assign decoder_output = DUT.ir_encode.decoder.decoderOutput;
- assign RinSignals = DUT.RinSignals;
- assign RoutSignals = DUT.RoutSignals;
 
 always @(Present_state) begin
     case (Present_state)
@@ -76,7 +74,7 @@ always @(Present_state) begin
             IncPC <= 0; Read <= 0; AND <= 0;
 				Rin <= 0; Rout <= 0;
 				GRA <= 0; GRB <= 0; GRC <= 0; BAout <= 0;
-//				RinSignals <= 16'd0; RoutSignals <= 16'd0;
+				Register_enable_Signals <= 16'd0; RoutSignals <= 16'd0;
 				HIout <= 0; LOout <= 0; ZHighout <= 0;
 				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
@@ -87,11 +85,11 @@ always @(Present_state) begin
             Mdatain<= 32'h00000022;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0; RinSignals[3] <= 1;
+				#15 Read <= 0; MDRin <= 0; Register_enable_Signals[3] <= 1;
         end
         Reg_load1b: begin
-				RinSignals[3] = 1; 
-				#5 MDRout<= 0; RinSignals[3] <= 0; 
+				Register_enable_Signals[3] = 1; 
+				#5 MDRout<= 0; Register_enable_Signals[3] <= 0;
         end
 			
         // Load value 0x24 into R7
@@ -99,11 +97,11 @@ always @(Present_state) begin
             Mdatain <= 32'h00000024;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0; RinSignals[7] <= 1;
+				#15 Read <= 0; MDRin <= 0; Register_enable_Signals[7] <= 1;
         end
         Reg_load2b: begin
-				RinSignals[7] = 1; 
-				#5 MDRout <= 0; RinSignals[7] <= 0;
+				Register_enable_Signals[7] = 1; 
+				#5 MDRout <= 0; Register_enable_Signals[7] <= 0;
         end
 
         // Load value 0x28 into R4
@@ -111,11 +109,11 @@ always @(Present_state) begin
             Mdatain <= 32'h00000028;
 				MDRout <= 1;
 				Read <= 1; MDRin <= 1;				
-				#15 Read <= 0; MDRin <= 0; RinSignals[4] <= 1;
+				#15 Read <= 0; MDRin <= 0; Register_enable_Signals[4] <= 1;
         end
         Reg_load3b: begin
-            RinSignals[4] = 1; 
-				#5 MDRout<= 0; RinSignals[4] <= 0;
+            Register_enable_Signals[4] = 1; 
+				#5 MDRout<= 0; Register_enable_Signals[4] <= 0;
 				#5 IncPC <= 1;
         end
 
@@ -143,13 +141,13 @@ always @(Present_state) begin
         end
 
         T4: begin
-            Rout <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
-            #10 Rout <= 0; AND <= 0; Zin <= 0;
-				#5 Zlowout <= 1; Rin <= 1;
+            RoutSignals[7] <= 1; AND <= 1; Zin <= 1; operation <= 5'b00101;
+            #10 RoutSignals[7] <= 0; AND <= 0; Zin <= 0;
+				#5 Zlowout <= 1; Register_enable_Signals[4] <= 1;
         end
 
         T5: begin
-            #10 Zlowout <= 0; Rin <= 0;
+            #10 Zlowout <= 0; Register_enable_Signals[4] <= 0;
         end
     endcase
    end
