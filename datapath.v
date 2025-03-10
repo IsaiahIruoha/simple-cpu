@@ -3,8 +3,7 @@
 module datapath(
     input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, clock,
     input wire ZHighout,LOout,HIout,Cout,InPortout,
-	 input wire GRA, GRB, GRC, Rin, Rout, BAout,
-    input wire[31:0] MDR_data_in, 
+	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
     input wire[4:0] operation,
     input wire[31:0] encoder_input,
 	 input wire[15:0] register_enable_signals,
@@ -14,7 +13,9 @@ module datapath(
 
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
-	 wire CON_output;
+	 wire CON_output, RAM_enable;
+	 
+	 wire[31:0] RAM_data_out;
 	 
 	 reg [15:0] RinSignals, RoutSignals;
 	 wire[15:0] ir_enable_signals;
@@ -35,7 +36,8 @@ module datapath(
 	 wire HI_enable, LO_enable, Output_port_enable;
 	 wire Input_port_strobe; //will need to be coming from device later
 	 
-	 wire [31:0] OutPort_data_out;  //going to feed to external device later
+	 wire [31:0] OutPort_data_out, device_data;  //going to feed to external device later
+	
 
 	 //5 bits that go from encoder to mux
 	 wire [4:0] mux_select_signal;
@@ -70,6 +72,7 @@ module datapath(
 	 wire [31:0] InPort_data_out;  //going to come from external device later
 	 wire [31:0] C_sign_extended;
 	 
+	 
 
     // Instantiate 32-bit registers
     register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
@@ -102,12 +105,12 @@ module datapath(
 	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
 	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
-	 register_32bit Input_port_register (clear, clock, Input_port_strobe, InPort_data_out, bus_data);
+	 register_32bit Input_port_register (clear, clock, Input_port_strobe, device_data, InPort_data_out);
 	 register_32bit Output_port_register (clear, clock, Output_port_enable, bus_data, OutPort_data_out);
  
 	 register_32bit MAR_register (clear, clock, MAR_enable, bus_data, MAR_data_out);
 	 
-	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, MDR_data_in, MDR_data_out);
+	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, RAM_data_out, MDR_data_out);
 	
 	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,RoutSignals}, mux_select_signal);
 
@@ -143,5 +146,14 @@ module datapath(
 
     // Instantiate the ALU
     alu alu_unit(.clk(clock), .clear(clear), .A_reg(Y_data_out), .B_reg(bus_data), .opcode(operation), .C_reg(c_data_out));
+	 
+	 // RAM
+	 ram memory(
+		.address(MAR_data_out),
+		.clock(clock),
+		.data(MDR_data_out),
+		.wren(RAM_enable),
+		.q(RAM_data_out)
+	 );
 	
 endmodule
