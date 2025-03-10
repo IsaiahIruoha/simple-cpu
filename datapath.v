@@ -7,9 +7,7 @@ module datapath(
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
     input wire[31:0] encoder_input,
-	 input wire[15:0] register_enable_signals,
-	 input wire[15:0] ir_enable_signals,
-	 input wire[15:0] ir_output_signals
+	 input wire[15:0] register_enable_signals
 );
 	
 
@@ -17,9 +15,11 @@ module datapath(
 	 wire [63:0] c_data_out;
 	 
 	 reg [15:0] RinSignals, RoutSignals;
+	 wire[15:0] ir_enable_signals;
+	 wire[15:0] ir_output_signals;
 	 
 	 always@(*)begin		
-			if (Rin)
+			if (ir_enable_signals)
 				RinSignals<=ir_enable_signals;
 			else
 				RinSignals<=register_enable_signals;

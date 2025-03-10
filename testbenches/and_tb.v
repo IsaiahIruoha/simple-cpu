@@ -15,9 +15,9 @@ module and_tb;
  wire [63:0] c_data;
  reg ZHighout,LOout,HIout,Cout,InPortout;
  reg GRA, GRB, GRC, Rin, Rout, BAout;
- reg [15:0] Register_enable_Signals, RoutSignals, ir_enable_signals, ir_output_signals;
+ reg [15:0] Register_enable_Signals, RoutSignals;
+ wire [15:0] ir_enable_signals, ir_output_signals;
  wire [15:0] decoder_output, test_out, test_in;
- wire [15:0] actual_Rout, actual_Rin, actual_BAout;
  
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
 Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
@@ -27,7 +27,7 @@ reg [3:0] Present_state = Default;
 
 datapath DUT(PCout, Zlowout, MDRout,MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND,Clock,ZHighout,LOout,HIout,Cout,InPortout, 
 GRA, GRB, GRC, Rin, Rout, BAout,
-Mdatain, operation, encoder_input, Register_enable_Signals,ir_output_signals);
+Mdatain, operation, encoder_input, Register_enable_Signals);
 
 initial begin
     Clock = 0;
@@ -67,9 +67,8 @@ end
  assign decoder_output = DUT.ir_encode.decoder.decoderOutput;
  assign test_out = DUT.ir_encode.RoutSignals;
  assign test_in = DUT.ir_encode.RinSignals;
- assign actual_Rout = DUT.ir_encode.Rout;
- assign actual_Rin = DUT.ir_encode.Rin;
- assign actual_BAout = DUT.ir_encode.BAout;
+ assign ir_enable_signals = DUT.ir_enable_signals;
+ assign ir_output_signals = DUT.ir_output_signals;
 
 always @(Present_state) begin
     case (Present_state)
@@ -81,7 +80,6 @@ always @(Present_state) begin
 				Rin <= 0; Rout <= 0;
 				GRA <= 0; GRB <= 0; GRC <= 0; BAout <= 0;
 				Register_enable_Signals <= 16'd0; RoutSignals <= 16'd0;
-				ir_enable_signals<= 16'd0; ir_output_signals<= 16'd0;
 				HIout <= 0; LOout <= 0; ZHighout <= 0;
 				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
