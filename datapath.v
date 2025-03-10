@@ -66,7 +66,7 @@ module datapath(
 	 wire [31:0] C_sign_extended;
 
     // Instantiate 32-bit registers
-         register_32bit r0 (clear, clock, RinSignals[0], bus_data, R0_data_out);
+    register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
 	 register_32bit r1 (clear, clock, RinSignals[1], bus_data, R1_data_out);
 	 register_32bit r2 (clear, clock, RinSignals[2], bus_data, R2_data_out);
 	 register_32bit r3 (clear, clock, RinSignals[3], bus_data, R3_data_out);
