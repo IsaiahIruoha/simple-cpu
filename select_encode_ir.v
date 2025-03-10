@@ -19,6 +19,5 @@ module select_encode_ir(
 
 	assign RinSignals = {16{Rin}} & decoderOutput;
 
-	
 
 endmodule

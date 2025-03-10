@@ -11,13 +11,15 @@ module datapath(
 	 input wire[15:0] ir_enable_signals,
 	 input wire[15:0] ir_output_signals
 );
+	
+
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
 	 
 	 reg [15:0] RinSignals, RoutSignals;
 	 
 	 always@(*)begin		
-			if (ir_enable_signals)
+			if (Rin)
 				RinSignals<=ir_enable_signals;
 			else
 				RinSignals<=register_enable_signals;
