@@ -1,15 +1,13 @@
 module con_ff(
-    input wire clk,         
-    input wire reset,      
-    input wire CON_in,      
-    output reg CON          
+    input wire clk,             
+    input wire D,
+	 input wire CON_in,
+    output reg Q          
 );
 
-    always @(posedge clk or posedge reset) begin
-        if (reset)
-            CON <= 0; 
-        else
-            CON <= CON_in; 
+    always @(posedge clk) begin
+			if(CON_in)
+            Q <= D; 
     end
 
 endmodule

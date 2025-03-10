@@ -7,12 +7,14 @@ module datapath(
     input wire[31:0] MDR_data_in, 
     input wire[4:0] operation,
     input wire[31:0] encoder_input,
-	 input wire[15:0] register_enable_signals
+	 input wire[15:0] register_enable_signals,
+	 input wire CON_in
 );
 	
 
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
+	 wire CON_output;
 	 
 	 reg [15:0] RinSignals, RoutSignals;
 	 wire[15:0] ir_enable_signals;
@@ -91,9 +93,10 @@ module datapath(
 	 neg_register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
 	 
 	 PC_register_32bit PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
-	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 
+	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
+	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
 	 register_32bit Input_port_register (clear, clock, Input_port_enable, bus_data, InPort_data_out);
  

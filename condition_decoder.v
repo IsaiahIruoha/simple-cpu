@@ -1,11 +1,11 @@
 module condition_decoder(
-    input wire [3:0] C2,     // extracted from IR[22:19]
-    input wire [31:0] Ra,  
-    output wire CON_in       
+    input wire [1:0] C2,     // extracted from IR[22:19]
+    input wire [31:0] bus_data,  
+    output wire D      
 );
 
-    assign CON_in = (C2 == 4'b0000) ? (Ra == 0) :       // (Branch if Zero)
-                    (C2 == 4'b0001) ? (Ra != 0) :       // (Branch if Nonzero)
-                    (C2 == 4'b0010) ? (Ra > 0) :        // (Branch if Positive)
-                    (C2 == 4'b0011) ? (Ra < 0) : 0;     // (Branch if Negative)
+    assign D = (C2 == 2'b00) ? (bus_data == 0) :       // (Branch if Zero)
+               (C2 == 2'b01) ? (bus_data != 0) :       // (Branch if Nonzero)
+               (C2 == 2'b10) ? (bus_data > 0) :        // (Branch if Positive)
+               (C2 == 2'b11) ? (bus_data < 0) : 0;     // (Branch if Negative)
 endmodule
