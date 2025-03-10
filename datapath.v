@@ -32,7 +32,10 @@ module datapath(
 	 end 
 
 	 // enables for various registers
-	 wire HI_enable, LO_enable, Input_port_enable;
+	 wire HI_enable, LO_enable, Output_port_enable;
+	 wire Input_port_strobe; //will need to be coming from device later
+	 
+	 wire [31:0] OutPort_data_out;  //going to feed to external device later
 
 	 //5 bits that go from encoder to mux
 	 wire [4:0] mux_select_signal;
@@ -40,7 +43,7 @@ module datapath(
 	 wire [31:0] Y_data_out;
 	 wire [31:0] IR_data_out;
 
-	 //input to 32 to 1 multiplexer
+	 //input to 32 to 1 multiplexer, go onto bus
 	 wire [31:0] R0_data_out;
 	 wire [31:0] R1_data_out;
 	 wire [31:0] R2_data_out;
@@ -64,8 +67,9 @@ module datapath(
 	 wire [31:0] PC_data_out;
 	 wire [31:0] MDR_data_out;
 	 wire [31:0] MAR_data_out;
-	 wire [31:0] InPort_data_out;
+	 wire [31:0] InPort_data_out;  //going to come from external device later
 	 wire [31:0] C_sign_extended;
+	 
 
     // Instantiate 32-bit registers
     register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
@@ -98,7 +102,8 @@ module datapath(
 	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
 	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
-	 register_32bit Input_port_register (clear, clock, Input_port_enable, bus_data, InPort_data_out);
+	 register_32bit Input_port_register (clear, clock, Input_port_strobe, InPort_data_out, bus_data);
+	 register_32bit Output_port_register (clear, clock, Output_port_enable, bus_data, OutPort_data_out);
  
 	 register_32bit MAR_register (clear, clock, MAR_enable, bus_data, MAR_data_out);
 	 
