@@ -1,7 +1,7 @@
 module ram2 #(parameter init_RAM_data_out = 0) (
     output reg [31:0] RAM_data_out,  // output declaration
     input [31:0] RAM_data_in,        // input declaration
-    input [8:0] address,             // address input
+    input [7:0] address,             // address input
     input clk,                     // clock input
     input write_enable,              // write enable input
     input read_enable                // read enable input
@@ -10,7 +10,7 @@ module ram2 #(parameter init_RAM_data_out = 0) (
 reg [31:0] mem [511:0];
 
 initial begin
-    mem[0] = 32'h08800002; // ldi R1, 2 ; R1 = 2
+    mem[0] = 32'h028000054; // ld R4, 0x54
     mem[1] = 32'h08080000; // ldi R0, 0(R1) ; R0 = 2
     mem[2] = 32'h01000068; // ld R2, $68 ; R2 = ($68) = $55
     mem[3] = 32'h0917FFFC; // ldi R2, -4(R2) ; R2 = $51

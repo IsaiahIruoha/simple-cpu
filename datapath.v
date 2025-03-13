@@ -150,7 +150,7 @@ module datapath(
 	 // RAM
 	 ram2 memory(
 	   .RAM_data_out(RAM_data_out),
-		.address(MAR_data_out[8:0]),
+		.address(MAR_data_out[7:0]),
 		.clk(clock),
 		.RAM_data_in(MDR_data_out),
 		.write_enable(RAM_enable),
