@@ -84,13 +84,13 @@ always @(Present_state) begin
 				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
 		  end
+		  //
         T0: begin
             PCout <= 1; MARin <= 1; IncPC <= 1; MDRout <= 1;
             #10 PCout <= 0; MARin <= 0;PCin <= 1; Read <= 1;
         end
         T1: begin
-            PCin <= 1; Read <= 1; MDRin <= 1; MDRout <= 1;
-				//opcode
+            MDRin <= 1; MDRout <= 1;
             #10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
         end
         T2: begin
@@ -99,7 +99,6 @@ always @(Present_state) begin
         end
 		  // ld R4, 0x54
         T3: begin
-//				GRB <= 1; BAout <= 1; Yin <= 1;
 				#10 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
         end
         T4: begin
@@ -108,16 +107,14 @@ always @(Present_state) begin
         end
 
         T5: begin
-				Zlowout = 1; MARin = 1;
 				#10 Zlowout = 0; MARin = 0; Read = 1;
         end
 		  T6: begin
-            Read = 1; MDRin = 1;
+            MDRin = 1;
 				#10 Read = 0; 
 				#5 MDRin = 0; MDRout = 1; GRA = 1; Rin = 1;
         end
         T7: begin
-            MDRout = 1; GRA = 1; Rin = 1;
 				#10 MDRout = 0; GRA = 0; Rin = 0;
 		  end
     endcase
