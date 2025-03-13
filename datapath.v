@@ -13,7 +13,7 @@ module datapath(
 
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
-	 wire CON_output, RAM_enable;
+	 wire CON_output, RAM_write;
 	 
 	 wire[31:0] RAM_data_out;
 	 
@@ -148,12 +148,13 @@ module datapath(
     alu alu_unit(.clk(clock), .clear(clear), .A_reg(Y_data_out), .B_reg(bus_data), .opcode(operation), .C_reg(c_data_out));
 	 
 	 // RAM
-	 ram memory(
-		.address(MAR_data_out),
-		.clock(clock),
-		.data(MDR_data_out),
-		.wren(RAM_enable),
-		.q(RAM_data_out)
+	 ram2 memory(
+	   .RAM_data_out(RAM_data_out),
+		.address(MAR_data_out[8:0]),
+		.clk(clock),
+		.RAM_data_in(MDR_data_out),
+		.write_enable(RAM_enable),
+		.read_enable(Read)
 	 );
 	
 endmodule
