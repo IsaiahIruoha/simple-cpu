@@ -10,7 +10,7 @@ module ram2 #(parameter init_RAM_data_out = 0) (
 reg [31:0] mem [511:0];
 
 initial begin
-    mem[0] = 32'h028000054; // ld R4, 0x54
+    mem[0] = 32'h02000054; // ld R4, 0x54
     mem[1] = 32'h08080000; // ldi R0, 0(R1) ; R0 = 2
     mem[2] = 32'h01000068; // ld R2, $68 ; R2 = ($68) = $55
     mem[3] = 32'h0917FFFC; // ldi R2, -4(R2) ; R2 = $51
@@ -59,7 +59,7 @@ initial begin
     mem[303] = 32'hA7800000; // jr R15 ; return from procedure
 
     mem[104] = 32'h00000055;
-    mem[82] = 32'h00000026;
+    mem[84] = 32'h00000097;
 
     RAM_data_out = init_RAM_data_out;
 

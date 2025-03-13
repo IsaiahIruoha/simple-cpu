@@ -19,7 +19,8 @@ module ld_tb;
  reg [15:0] Register_enable_Signals, RoutSignals;
  wire [15:0] ir_enable_signals, ir_output_signals;
  wire [15:0] decoder_output, test_out, test_in;
-// wire CON_in;
+ wire CON_in;
+wire [31:0] c_sign_extended;
 
 parameter Default = 4'b0000, T0 = 4'b0001, T1 = 4'b0010, T2 = 4'b0011, T3 = 4'b0100, T4 = 4'b0101, T5 = 4'b0110, T6 = 4'b0111, T7 = 4'b1000;
  
@@ -66,6 +67,8 @@ end
  assign test_in = DUT.ir_encode.RinSignals;
  assign ir_enable_signals = DUT.ir_enable_signals;
  assign ir_output_signals = DUT.ir_output_signals;
+ assign c_sign_extended = DUT.C_sign_extended;
+ assign mar_data = DUT.MAR_data_out;
 
 always @(Present_state) begin
     case (Present_state)
@@ -80,7 +83,7 @@ always @(Present_state) begin
 				HIout <= 0; LOout <= 0; ZHighout <= 0;
 				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
             Mdatain <= 32'h00000000;
-			end
+		  end
         T0: begin
             PCout <= 1; MARin <= 1; IncPC <= 1; MDRout <= 1;
             #10 PCout <= 0; MARin <= 0;PCin <= 1; Read <= 1;
@@ -92,29 +95,30 @@ always @(Present_state) begin
         end
         T2: begin
             MDRout <= 1; IRin <= 1; 
-            #10 MDRout <= 0; IRin <= 0; GRB <= 1; Rout <= 1; BAout <= 1;
+            #10 MDRout <= 0; IRin <= 0; Yin <= 1; GRB <= 1; BAout <= 1;
         end
 		  // ld R4, 0x54
         T3: begin
-				GRB = 1; BAout = 1; Yin = 1;
-				#10 GRB = 0; BAout = 0; Yin = 0;
+//				GRB <= 1; BAout <= 1; Yin <= 1;
+				#10 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
         end
         T4: begin
-//				Cout = 1; operation = 5'b00001; Zin = 1;
-//				#10 Cout = 0; Zin = 0;
+				Cout <= 1; operation <= 5'b00011; Zin <= 1;
+				#10 Cout <= 0; Zin <= 0; Zlowout = 1; MARin = 1;
         end
 
         T5: begin
-//				Zlowout = 1; MARin = 1;
-//				#10 Zlowout = 0; MARin = 0;
+				Zlowout = 1; MARin = 1;
+				#10 Zlowout = 0; MARin = 0; Read = 1;
         end
 		  T6: begin
-//            Read = 1; MDRin = 1;
-//				#10 Read = 0; MDRin = 0;
+            Read = 1; MDRin = 1;
+				#10 Read = 0; 
+				#5 MDRin = 0; MDRout = 1; GRA = 1; Rin = 1;
         end
         T7: begin
-//            MDRout = 1; GRA = 1; Rin = 1;
-//				#10 MDRout = 0; GRA = 0; Rin = 0;
+            MDRout = 1; GRA = 1; Rin = 1;
+				#10 MDRout = 0; GRA = 0; Rin = 0;
 		  end
     endcase
    end
