@@ -1,9 +1,11 @@
-module PC_register_32bit(
+module PC_register_32bit #(
+    parameter INIT_PC = 32'h00000000 // Default initial PC value
+)(
     input  wire        clock,
     input  wire        clear,
     input  wire        enable,
     input  wire        IncPC,
-    input  wire [31:0] external_val,  // If IncPC is 0 but enable is 1, we load this external value 
+    input  wire [31:0] external_val,  // If IncPC is 0 but enable is 1, load this external value
     output wire [31:0] PC_out
 );
     wire [31:0] currentPC;   
@@ -14,7 +16,7 @@ module PC_register_32bit(
     register_32bit #(
         .DATA_WIDTH_IN(32),
         .DATA_WIDTH_OUT(32),
-        .INIT(32'h00000000)       // Initial PC value
+        .INIT(INIT_PC)  // Use the parameter for initial PC value
     ) pc_reg (
         .clear(clear),
         .clock(clock),
@@ -37,5 +39,6 @@ module PC_register_32bit(
         else
             nextPC_in = external_val;   // some external load value
     end
+
     assign PC_out = currentPC; // The register output is our PC
 endmodule

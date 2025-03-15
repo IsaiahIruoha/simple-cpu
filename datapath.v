@@ -99,7 +99,7 @@ module datapath(
 	 neg_register_32bit Z_high_register (clear, clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
 	 neg_register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
 	 
-	 PC_register_32bit PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
+	 PC_register_32bit #(.INIT_PC(32'h00000000)) PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
 	 
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
@@ -156,5 +156,19 @@ module datapath(
 		.write_enable(RAM_enable),
 		.read_enable(Read)
 	 );
+	 
+	 
+	 
+	 //ld case 2
+//	 defparam PC_register.INIT_PC = 32'h00000001;
+//	 defparam r2.INIT = 32'h00000078;
+
+	//ldi case 1
+	 defparam PC_register.INIT_PC = 32'h00000002;
+	 
+	 //ldi case 2
+	 defparam PC_register.INIT_PC = 32'h00000003;
+	 defparam r2.INIT = 32'h00000078;
+
 	
 endmodule
