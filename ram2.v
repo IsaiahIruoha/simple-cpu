@@ -16,10 +16,10 @@ initial begin
     mem[3] = 32'h0B100063; // ldi r6, 0x63(R2)
     mem[4] = 32'h11800034; // st 0x34, R3
     mem[5] = 32'h11980034; // st 0x34(R3), R3
+    mem[6] = 32'h62B7FFF9; // addi R5, R6, -7
+    mem[7] = 32'h6AB00095; // andi R5, R6, 0x95
+    mem[8] = 32'h32B00095; // ori R5, R6, 0x95
 	 
-    mem[6] = 32'h99980004; // brmi R3, 4 ; continue with the next instruction (will not branch)
-    mem[7] = 32'h09980002; // ldi R3, 2(R3) ; R3 = $6B
-    mem[8] = 32'h039FFFFD; // ld R7, -3(R3) ; R7 = ($6B - 3) = $55
     mem[9] = 32'hD0000000; // nop
     mem[10] = 32'h9B900002; // brpl R7, 2 ; continue with the instruction at “target” (will branch)
     mem[11] = 32'h09000005; // (Done manually, might be wrong tho lol) ldi R2, 5(R0) ; this instruction will not execute

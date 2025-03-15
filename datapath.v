@@ -175,8 +175,20 @@ module datapath(
 //	 defparam r3.INIT = 32'h000000B6;
 	 
 	 //st case 2
-	 defparam PC_register.INIT_PC = 32'h00000005;
-	 defparam r3.INIT = 32'h000000B6;
+//	 defparam PC_register.INIT_PC = 32'h00000005;
+//	 defparam r3.INIT = 32'h000000B6;
+
+	//addi
+//	defparam PC_register.INIT_PC = 32'h00000006;
+//	defparam r6.INIT = 32'h00000001;
+
+	//andi
+//	defparam PC_register.INIT_PC = 32'h00000007;
+//	defparam r6.INIT = 32'hFFFFFFFF;
+	
+	//andi
+	defparam PC_register.INIT_PC = 32'h00000008;
+	defparam r6.INIT = 32'h00000000;
 
 
 	
