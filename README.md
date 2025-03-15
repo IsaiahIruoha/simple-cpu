@@ -24,4 +24,11 @@ Designing, simulating, and implementing a Simple RISC Computer
 |------|---------------|
 | **T0-T2** | Same as before for “Instruction Fetch" |
 | **T3** | `PCout`, `R8in`  |
-| **T2** | `Gra`, `Rout`, `PCin` |
+| **T4** | `Gra`, `Rout`, `PCin` |
+
+### **MFHI / MFLO Control Sequence**  
+
+| Step | Control Signals |
+|------|---------------|
+| **T0-T2** | Same as before for “Instruction Fetch" |
+| **T3** | `Gra`, `Rin`, `HIout/LOout` |
