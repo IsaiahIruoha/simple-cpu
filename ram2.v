@@ -21,12 +21,12 @@ initial begin
     mem[8] = 32'h32B00095; // ori R5, R6, 0x95
 	 mem[9] = 32'hAC000000; // jr R8
 	 mem[10] = 32'hA2800000; // jal R5
-	 
-    mem[11] = 32'h09000005; // (Done manually, might be wrong tho lol) ldi R2, 5(R0) ; this instruction will not execute
-    mem[12] = 32'h09880002; // ldi R3, 2(R1) ; this instruction will not execute
-    mem[13] = 32'h19918000; // add R3, R2, R3 ; R3 = $BC <------- THIS IS TARGET
-    mem[14] = 32'h63B80002; // addi R7, R7, 2 ; R7 = $57
-    mem[15] = 32'h8BB80000; // neg R7, R7 ; R7 = $FFFFFFA9
+    mem[11] = 32'hC9800000; // mfhi R3
+	 mem[12] = 32'hC1000000; // mflo R2
+	 mem[13] = 32'hBB000000; // out R6
+	 mem[14] = 32'hB1800000; // in R3
+    
+	 mem[15] = 32'h8BB80000; // neg R7, R7 ; R7 = $FFFFFFA9
     mem[16] = 32'h93B80000; // not R7, R7 ; R7 = $56
     mem[17] = 32'h6BB8000F; // andi R7, R7, $0F ; R7 = 6
     mem[18] = 32'h50880000; // ror R1, R1, R0 ; R1 = $80000009

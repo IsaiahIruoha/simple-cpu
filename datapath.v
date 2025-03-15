@@ -1,12 +1,12 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, Write, AND, clock,
+    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Output_port_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
     input wire ZHighout,LOout,HIout,Cout,InPortout,
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
     input wire[4:0] operation,
     input wire[31:0] encoder_input,
-	 input wire[15:0] register_enable_signals,
+	 input wire[15:0] register_enable_signals, 
 	 input wire CON_in
 );
 	
@@ -33,7 +33,8 @@ module datapath(
 	 end 
 
 	 // enables for various registers
-	 wire HI_enable, LO_enable, Output_port_enable;
+	 wire HI_enable;
+//	 wire Output_port_enable;
 	 wire Input_port_strobe; //will need to be coming from device later
 	 
 	 wire [31:0] OutPort_data_out, device_data;  //going to feed to external device later
@@ -195,10 +196,27 @@ module datapath(
 //	defparam r8.INIT = 32'h00000036;
 	
 	//jal
-	defparam PC_register.INIT_PC = 32'h0000000A;
-	defparam r8.INIT = 32'h00000036;
-	defparam r5.INIT = 32'h00000015;
+//	defparam PC_register.INIT_PC = 32'h0000000A;
+//	defparam r8.INIT = 32'h00000036;
+//	defparam r5.INIT = 32'h00000015;
 
+	//mfhi
+//	defparam PC_register.INIT_PC = 32'h0000000B;
+//	defparam r3.INIT = 32'h00000036;
+//	defparam HI_register.INIT = 32'h00000024;
+	
+	//mflo
+//	defparam PC_register.INIT_PC = 32'h0000000C;
+//	defparam r2.INIT = 32'h00000036;
+//	defparam LO_register.INIT = 32'h00000024;
+	
+	//out
+//	defparam PC_register.INIT_PC = 32'h0000000D;
+//	defparam r6.INIT = 32'h00000036;
+
+	//in
+	defparam PC_register.INIT_PC = 32'h0000000E;
+	defparam Input_port_register.INIT = 32'h00000036;
 
 
 	
