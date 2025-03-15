@@ -14,9 +14,9 @@ initial begin
     mem[1] = 32'h03100063; // ld r6, 0x63(R2)
     mem[2] = 32'h0A000054; // ldi R4, 0x54
     mem[3] = 32'h0B100063; // ldi r6, 0x63(R2)
-	
-    mem[4] = 32'h00900001; // ld R1, 1(R2) ; R1 = ($52) = $26
-    mem[5] = 32'h09800069; // ldi R3, $69 ; R3 = $69
+    mem[4] = 32'h11800034; // st 0x34, R3
+    mem[5] = 32'h11980034; // st 0x34(R3), R3
+	 
     mem[6] = 32'h99980004; // brmi R3, 4 ; continue with the next instruction (will not branch)
     mem[7] = 32'h09980002; // ldi R3, 2(R3) ; R3 = $6B
     mem[8] = 32'h039FFFFD; // ld R7, -3(R3) ; R7 = ($6B - 3) = $55
@@ -60,8 +60,12 @@ initial begin
     mem[303] = 32'hA7800000; // jr R15 ; return from procedure
 
     mem[104] = 32'h00000055;
+	 
+	 mem[52] = 32'h00000025; //st case one [4]
     mem[84] = 32'h00000097; //ld case one [0]
 	 mem[219] = 32'h00000046; //ld case two [1]
+	 mem[234] = 32'h00000019; //st case two [5]
+	 
 
     RAM_data_out = init_RAM_data_out;
 

@@ -3,7 +3,7 @@
 module ldi2_tb;
  reg PCout, Zlowout, MDRout;
  reg MARin, Zin, PCin, MDRin, IRin, Yin;
- reg IncPC, Read, AND;
+ reg IncPC, Read, Write, AND;
  reg Clock;
  reg [31:0] Mdatain;
  reg [4:0] operation;
@@ -26,7 +26,7 @@ parameter Default = 4'b0000, T0 = 4'b0001, T1 = 4'b0010, T2 = 4'b0011, T3 = 4'b0
  
 reg [3:0] Present_state = Default;
 
- datapath DUT(PCout, Zlowout, MDRout, MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, AND, Clock,
+ datapath DUT(PCout, Zlowout, MDRout, MARin, Zin, PCin, MDRin, IRin, Yin, IncPC, Read, Write, AND, Clock,
                  ZHighout, LOout, HIout, Cout, InPortout, GRA, GRB, GRC, Rin, Rout, BAout,
                  operation, encoder_input, Register_enable_Signals, CON_in);
 					  

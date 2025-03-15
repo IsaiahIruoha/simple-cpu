@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 
-module ld_tb;
+module st_tb;
  reg PCout, Zlowout, MDRout;
  reg MARin, Zin, PCin, MDRin, IRin, Yin;
  reg IncPC, Read, Write, AND;
@@ -49,7 +49,7 @@ always @(posedge Clock) begin
     endcase
 end
 
- assign mdr_data_out = DUT.mdr_unit.MDRout;
+ assign mdr_data_out = DUT.MDR_data_out;
  assign bus_data = DUT.bus_data;
  assign encoder_output = DUT.bus_encoder.encoderOutput;
  assign encoder_input = DUT.bus_encoder.encoderInput;
@@ -76,17 +76,17 @@ always @(Present_state) begin
 				PCout <= 1; Zlowout <= 0; MDRout <= 0;
             MARin <= 0; Zin <= 0;
             PCin <= 0; MDRin <= 0; IRin <= 0; Yin <= 0;
-            IncPC <= 1; Read <= 0; AND <= 0;
+            IncPC <= 1; Read <= 0; Write <= 0; AND <= 0;
 				Rin <= 0; Rout <= 0;
 				GRA <= 0; GRB <= 0; GRC <= 0; BAout <= 0;
 				Register_enable_Signals <= 16'd0; RoutSignals <= 16'd0;
 				HIout <= 0; LOout <= 0; ZHighout <= 0;
 				Cout<= 0;InPortout<= 0; operation <= 5'b00000;
-            Mdatain <= 32'h00000000;
+            Mdatain <= 32'h00000000; MARin <= 1;
 		  end
 		  //
         T0: begin
-            PCout <= 1; MARin <= 1; IncPC <= 1; MDRout <= 1;
+            PCout <= 1; IncPC <= 1; MDRout <= 1;
             #10 PCout <= 0; MARin <= 0;PCin <= 1; Read <= 1;
         end
         T1: begin
@@ -107,15 +107,15 @@ always @(Present_state) begin
         end
 
         T5: begin
-				#10 Zlowout = 0; MARin = 0; Read = 1;
+				#10 Zlowout = 0; MARin = 0;
+				#5 GRA = 1; Rout = 1; MDRin = 1;
         end
 		  T6: begin
-            MDRin = 1;
-				#10 Read = 0; 
-				#5 MDRin = 0; MDRout = 1; GRA = 1; Rin = 1;
+				#10 GRA <= 0; Rout<= 0; MDRin <= 0; 
+				#5  MDRout = 1; Write <= 1;
         end
         T7: begin
-				#10 MDRout = 0; GRA = 0; Rin = 0;
+				#10 MDRout = 0; Write <= 0;
 		  end
     endcase
    end

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, AND, clock,
+    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, Write, AND, clock,
     input wire ZHighout,LOout,HIout,Cout,InPortout,
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
     input wire[4:0] operation,
@@ -13,7 +13,7 @@ module datapath(
 
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
-	 wire CON_output, RAM_write;
+	 wire CON_output;
 	 
 	 wire[31:0] RAM_data_out;
 	 
@@ -153,7 +153,7 @@ module datapath(
 		.address(MAR_data_out[7:0]),
 		.clk(clock),
 		.RAM_data_in(MDR_data_out),
-		.write_enable(RAM_enable),
+		.write_enable(Write),
 		.read_enable(Read)
 	 );
 	 
@@ -164,11 +164,20 @@ module datapath(
 //	 defparam r2.INIT = 32'h00000078;
 
 	//ldi case 1
-	 defparam PC_register.INIT_PC = 32'h00000002;
+//	 defparam PC_register.INIT_PC = 32'h00000002;
 	 
 	 //ldi case 2
-	 defparam PC_register.INIT_PC = 32'h00000003;
-	 defparam r2.INIT = 32'h00000078;
+//	 defparam PC_register.INIT_PC = 32'h00000003;
+//	 defparam r2.INIT = 32'h00000078;
+
+	 //st case 1
+//	 defparam PC_register.INIT_PC = 32'h00000004;
+//	 defparam r3.INIT = 32'h000000B6;
+	 
+	 //st case 2
+	 defparam PC_register.INIT_PC = 32'h00000005;
+	 defparam r3.INIT = 32'h000000B6;
+
 
 	
 endmodule
