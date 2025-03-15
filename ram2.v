@@ -19,9 +19,9 @@ initial begin
     mem[6] = 32'h62B7FFF9; // addi R5, R6, -7
     mem[7] = 32'h6AB00095; // andi R5, R6, 0x95
     mem[8] = 32'h32B00095; // ori R5, R6, 0x95
+	 mem[9] = 32'hAC000000; // jr R8
+	 mem[10] = 32'hA2800000; // jal R5
 	 
-    mem[9] = 32'hD0000000; // nop
-    mem[10] = 32'h9B900002; // brpl R7, 2 ; continue with the instruction at “target” (will branch)
     mem[11] = 32'h09000005; // (Done manually, might be wrong tho lol) ldi R2, 5(R0) ; this instruction will not execute
     mem[12] = 32'h09880002; // ldi R3, 2(R1) ; this instruction will not execute
     mem[13] = 32'h19918000; // add R3, R2, R3 ; R3 = $BC <------- THIS IS TARGET
