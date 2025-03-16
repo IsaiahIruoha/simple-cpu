@@ -25,11 +25,11 @@ initial begin
 	 mem[12] = 32'hC1000000; // mflo R2
 	 mem[13] = 32'hBB000000; // out R6
 	 mem[14] = 32'hB1800000; // in R3
-    
-	 mem[15] = 32'h8BB80000; // neg R7, R7 ; R7 = $FFFFFFA9
-    mem[16] = 32'h93B80000; // not R7, R7 ; R7 = $56
-    mem[17] = 32'h6BB8000F; // andi R7, R7, $0F ; R7 = 6
-    mem[18] = 32'h50880000; // ror R1, R1, R0 ; R1 = $80000009
+	 mem[15] = 32'h9880001B; // brzr R1, 27
+    mem[16] = 32'h9888001B; // brnz R1, 27
+	 mem[17] = 32'h9890001B; // brpl R1, 27	 
+    mem[18] = 32'h9898001B; // brmi R1, 27
+
     mem[19] = 32'h7388001C; // ori R7, R1, $1C ; R7 = $8000001D
     mem[20] = 32'h43B80000; // shra R7, R7, R0 ; R7 = $E0000007
     mem[21] = 32'h39180000; // shr R2, R3, R0 ; R2 = $2F

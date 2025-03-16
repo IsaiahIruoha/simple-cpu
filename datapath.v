@@ -1,19 +1,19 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Output_port_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
+    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
     input wire ZHighout,LOout,HIout,Cout,InPortout,
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
     input wire[4:0] operation,
     input wire[31:0] encoder_input,
 	 input wire[15:0] register_enable_signals, 
-	 input wire CON_in
+	 input wire CON_in, CON_output
 );
 	
 
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
-	 wire CON_output;
+//	 wire CON_output;
 	 
 	 wire[31:0] RAM_data_out;
 	 
@@ -215,9 +215,23 @@ module datapath(
 //	defparam r6.INIT = 32'h00000036;
 
 	//in
-	defparam PC_register.INIT_PC = 32'h0000000E;
-	defparam Input_port_register.INIT = 32'h00000036;
+//	defparam PC_register.INIT_PC = 32'h0000000E;
+//	defparam Input_port_register.INIT = 32'h00000036;
 
-
+	//brzr
+//	defparam PC_register.INIT_PC = 32'h0000000F;
+//	defparam r1.INIT = 32'h00000001;
+	
+	//brnz
+//	defparam PC_register.INIT_PC = 32'h00000010;
+//	defparam r1.INIT = 32'h00000000;
+	
+	//brpl
+//	defparam PC_register.INIT_PC = 32'h00000011;
+//	defparam r1.INIT = 32'hFFFFFFFF;
+	
+	//brmi
+	defparam PC_register.INIT_PC = 32'h00000012;
+	defparam r1.INIT = 32'h00000001;
 	
 endmodule
