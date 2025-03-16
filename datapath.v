@@ -227,11 +227,11 @@ module datapath(
 //	defparam r1.INIT = 32'h00000000;
 	
 	//brpl
-//	defparam PC_register.INIT_PC = 32'h00000011;
-//	defparam r1.INIT = 32'hFFFFFFFF;
+	defparam PC_register.INIT_PC = 32'h00000011;
+	defparam r1.INIT = 32'h00000001;
 	
 	//brmi
-	defparam PC_register.INIT_PC = 32'h00000012;
-	defparam r1.INIT = 32'h00000001;
+//	defparam PC_register.INIT_PC = 32'h00000012;
+//	defparam r1.INIT = 32'h00000001;
 	
 endmodule

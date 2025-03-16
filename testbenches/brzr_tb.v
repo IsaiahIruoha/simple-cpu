@@ -70,9 +70,6 @@ end
  assign ir_output_signals = DUT.ir_output_signals;
  assign c_sign_extended = DUT.C_sign_extended;
  assign mar_data = DUT.MAR_data_out;
- assign test = DUT.conff_unit.CON;
- assign test2 = DUT.conff_unit.D;
-// assign CON_out = DUT.CON_output;
 
 
 always @(Present_state) begin
