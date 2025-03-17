@@ -19,7 +19,8 @@ module ld2_tb;
  reg [15:0] Register_enable_Signals, RoutSignals;
  wire [15:0] ir_enable_signals, ir_output_signals;
  wire [15:0] decoder_output, test_out, test_in;
- wire CON_in;
+ reg CON_in;
+ wire CON_out;
 wire [31:0] c_sign_extended;
 
 parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, T0 = 4'b0011, T1 = 4'b0100, T2 = 4'b0101, T3 = 4'b0110, T4 = 4'b0111, T5 = 4'b1000, T6 = 4'b1001, T7 = 4'b1010;

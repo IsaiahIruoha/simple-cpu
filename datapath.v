@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
+    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Output_port_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
     input wire ZHighout,LOout,HIout,Cout,InPortout,
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
     input wire[4:0] operation,
@@ -187,7 +187,7 @@ module datapath(
 //	defparam PC_register.INIT_PC = 32'h00000007;
 //	defparam r6.INIT = 32'hFFFFFFFF;
 	
-	//andi
+	//ori
 //	defparam PC_register.INIT_PC = 32'h00000008;
 //	defparam r6.INIT = 32'h00000000;
 
@@ -227,8 +227,8 @@ module datapath(
 //	defparam r1.INIT = 32'h00000000;
 	
 	//brpl
-	defparam PC_register.INIT_PC = 32'h00000011;
-	defparam r1.INIT = 32'h00000001;
+//	defparam PC_register.INIT_PC = 32'h00000011;
+//	defparam r1.INIT = 32'h00000001;
 	
 	//brmi
 //	defparam PC_register.INIT_PC = 32'h00000012;
