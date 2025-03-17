@@ -5,6 +5,8 @@ module con_ff(
     output reg Q          
 );
 
+	initial Q = 1'd0;
+
     always @(posedge clk) begin
 			if(CON_in)
             Q <= D; 

@@ -89,7 +89,7 @@ module datapath(
 	 register_32bit r10 (clear, clock, RinSignals[10], bus_data, R10_data_out);
 	 register_32bit r11 (clear, clock, RinSignals[11], bus_data, R11_data_out);
 	 register_32bit r12 (clear, clock, RinSignals[12], bus_data, R12_data_out);
-	 register_32bit r13 (clear, clock, RinSignals[13], bus_data, R13_data_out);
+ register_32bit r13 (clear, clock, RinSignals[13], bus_data, R13_data_out);
 	 register_32bit r14 (clear, clock, RinSignals[14], bus_data, R14_data_out);
 	 register_32bit r15 (clear, clock, RinSignals[15], bus_data, R15_data_out);
 	 
