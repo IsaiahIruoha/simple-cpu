@@ -206,30 +206,28 @@ always @(present_state) // do the job for each state
 			
 			// and, or, shl, shr, rol, ror
 			or3, and3, shl3, shr3, rol3, ror3: begin	
-					MDRout <= 0; IR_enable <= 0;PC_enable <= 0; IncPC <= 0;
-					Grb <= 1; Rout <= 1; Y_enable <= 1;
+					Grb <= 1; Rout <= 1; Yin <= 1;
 			end
 			
 			or4, and4, shl4, shr4, rol4, ror4: begin
-					Grb <=0; Rout <= 0; Y_enable <= 0;
+					Grb <=0; Rout <= 0; Yin <= 0;
 					Grc <=1; Rout <= 1; ZHighIn <= 1; ZLowIn <= 1;
 			end
 			
 			or5, and5, shl5, shr5, rol5, ror5: begin
 					Grc <= 0; Rout <= 0; ZHighIn <= 0; ZLowIn <= 0;
-					ZLowout <= 1; Gra <= 1; R_enable <= 1;
-					#10 ZLowout <= 0; Gra <= 1; Rout <= 1; R_enable <= 0;
+					ZLowout <= 1; Gra <= 1; Rin <= 1;
+					#10 ZLowout <= 0; Gra <= 1; Rout <= 1; Rin <= 0;
 			end
 			
 			// mul and div
 			mul3, div3: begin	
-					MDRout <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;
-					Grb <= 1; Rout <= 1; Y_enable <= 1;  
+					Grb <= 1; Rout <= 1; Yin <= 1;  
 			
 			end
 			
 			mul4, div4: begin
-					Grb <= 0; Rout <= 0; Y_enable <= 0;
+					Grb <= 0; Rout <= 0; Yin <= 0;
 					Grc <= 1; Rout <= 1; ZHighIn <= 1; ZLowIn <= 1;
 			end
 			
@@ -245,18 +243,18 @@ always @(present_state) // do the job for each state
 			
 			// not and neg
 			not3, neg3: begin	
-					MDRout <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;
 					Grb<=1; Rout <= 1; ZHighIn <= 1; ZLowIn <= 1;
 			end
 			
 			not4, neg4: begin
 					Grb <= 0; Rout <= 0; ZHighIn <= 0; ZLowIn <= 0;
-					ZLowout <= 1; Gra <= 1; R_enable <= 1;
+					ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
 			// load
 			ld3: begin
-					#10 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; GRB <= 1; BAout <= 1;
+					#15 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			ld4: begin
@@ -280,7 +278,8 @@ always @(present_state) // do the job for each state
 			
 			// ldi
 			ldi3: begin
-					#10 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; GRB <= 1; BAout <= 1;
+					#15 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			ldi4: begin
@@ -294,7 +293,8 @@ always @(present_state) // do the job for each state
 			
 			//st
 			st3: begin
-					#10 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; GRB <= 1; BAout <= 1;
+					#15 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			st4: begin
@@ -318,6 +318,7 @@ always @(present_state) // do the job for each state
 			
 			// addi, ori, andi
 			addi3, ori3, andi3: begin
+					Yin <= 1; GRB <= 1; Rout <= 1;
 					#10 GRB <= 0; Rout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
@@ -332,7 +333,8 @@ always @(present_state) // do the job for each state
 			
 			// branch
 			br3: begin
-					#10 Rout <= 0; GRA <= 0; CON_in <= 0; PCout <= 1; Yin <= 1;
+					Rout <= 1; GRA <= 1; CON_in <= 1;
+					#15 Rout <= 0; GRA <= 0; CONin <= 0; PCout <= 1; Yin <= 1;
 			end
 			
 			br4: begin
@@ -352,11 +354,13 @@ always @(present_state) // do the job for each state
 			
 			// jumps
 			jr3: begin
-					#10 GRA <= 0; Rout <= 0; PCin <= 0;
+					 GRA <= 1; Rout <= 1; PCin <= 1;
+					#15 GRA <= 0; Rout <= 0; PCin <= 0;
 			end
 			
 			jal3: begin
-					#10 PCout <= 0; Register_enable_Signals[8] <= 0; GRA <= 1; Rout <= 1; PCin <= 1;
+					GRA <= 1; Rout <= 1; PCin <= 1;
+					#10 PCout <= 0; RegisteRin_Signals[8] <= 0; GRA <= 1; Rout <= 1; PCin <= 1;
 			end
 			
 			jal4: begin
@@ -365,19 +369,23 @@ always @(present_state) // do the job for each state
 			
 			// mfhi mflo
 			mfhi3: begin
+					GRA = 1; Rin = 1; HIout = 1;
 					#10 GRA <= 0; Rin <= 0; HIout <= 0;
 			end
 			
 			mflo3: begin
+					GRA <= 1; Rin <= 1; LOout <= 1;
 					#10 GRA <= 0; Rin <= 0; LOout <= 0;
 			end
 			
 			//in out
 			in3: begin
+					GRA <= 1; Rin <= 1; InPortout<= 1;
 					#10 GRA <= 0; Rin <= 0; InPortout <= 0;
 			end
 			
 			out3: begin
+					GRA <= 1; Rout <= 1; out_in <= 1;
 					#10 GRA <= 0; Rout <= 0; out_in <= 0;
 			end
 			

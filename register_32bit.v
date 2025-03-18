@@ -7,6 +7,9 @@ module register_32bit #(
     input [DATA_WIDTH_IN-1:0] BusMuxOut,
     output wire [DATA_WIDTH_OUT-1:0] BusMuxIn
 );
+
+    
+
     reg [DATA_WIDTH_IN-1:0] q;
     initial q = INIT;
 
@@ -15,7 +18,7 @@ module register_32bit #(
             q <= {DATA_WIDTH_IN{1'b0}};
         end
         else if (enable) begin
-            q <= BusMuxOut;
+            q = BusMuxOut;
         end
     end
 

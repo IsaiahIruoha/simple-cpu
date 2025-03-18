@@ -92,10 +92,11 @@ always @(Present_state) begin
         end
         T2: begin
             MDRout <= 1; IRin <= 1; 
-            #10 MDRout <= 0; IRin <= 0; GRA <= 1; Rin <= 1; HIout <= 1;
+            #10 MDRout <= 0; IRin <= 0; 
         end
         T3: begin
-				#10 GRA <= 0; Rin <= 0; HIout <= 0;
+				GRA = 1; Rin = 1; HIout = 1;
+				#15 GRA <= 0; Rin <= 0; HIout <= 0;
         end
     endcase
    end

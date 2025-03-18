@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Output_port_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
+    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
     input wire ZHighout,LOout,HIout,Cout,InPortout,
 	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
     input wire[4:0] operation,
@@ -76,22 +76,22 @@ module datapath(
 	 
 
     // Instantiate 32-bit registers
-    register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
-	 register_32bit r1 (clear, clock, RinSignals[1], bus_data, R1_data_out);
-	 register_32bit r2 (clear, clock, RinSignals[2], bus_data, R2_data_out);
-	 register_32bit r3 (clear, clock, RinSignals[3], bus_data, R3_data_out);
-	 register_32bit r4 (clear, clock, RinSignals[4], bus_data, R4_data_out);
-	 register_32bit r5 (clear, clock, RinSignals[5], bus_data, R5_data_out);
-	 register_32bit r6 (clear, clock, RinSignals[6], bus_data, R6_data_out);
-	 register_32bit r7 (clear, clock, RinSignals[7], bus_data, R7_data_out);
-	 register_32bit r8 (clear, clock, RinSignals[8], bus_data, R8_data_out);
-	 register_32bit r9 (clear, clock, RinSignals[9], bus_data, R9_data_out);
-	 register_32bit r10 (clear, clock, RinSignals[10], bus_data, R10_data_out);
-	 register_32bit r11 (clear, clock, RinSignals[11], bus_data, R11_data_out);
-	 register_32bit r12 (clear, clock, RinSignals[12], bus_data, R12_data_out);
- register_32bit r13 (clear, clock, RinSignals[13], bus_data, R13_data_out);
-	 register_32bit r14 (clear, clock, RinSignals[14], bus_data, R14_data_out);
-	 register_32bit r15 (clear, clock, RinSignals[15], bus_data, R15_data_out);
+    neg_register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
+	 neg_register_32bit r1 (clear, clock, RinSignals[1], bus_data, R1_data_out);
+	 neg_register_32bit r2 (clear, clock, RinSignals[2], bus_data, R2_data_out);
+	 neg_register_32bit r3 (clear, clock, RinSignals[3], bus_data, R3_data_out);
+	 neg_register_32bit r4 (clear, clock, RinSignals[4], bus_data, R4_data_out);
+	 neg_register_32bit r5 (clear, clock, RinSignals[5], bus_data, R5_data_out);
+	 neg_register_32bit r6 (clear, clock, RinSignals[6], bus_data, R6_data_out);
+	 neg_register_32bit r7 (clear, clock, RinSignals[7], bus_data, R7_data_out);
+	 neg_register_32bit r8 (clear, clock, RinSignals[8], bus_data, R8_data_out);
+	 neg_register_32bit r9 (clear, clock, RinSignals[9], bus_data, R9_data_out);
+	 neg_register_32bit r10 (clear, clock, RinSignals[10], bus_data, R10_data_out);
+	 neg_register_32bit r11 (clear, clock, RinSignals[11], bus_data, R11_data_out);
+	 neg_register_32bit r12 (clear, clock, RinSignals[12], bus_data, R12_data_out);
+	 neg_register_32bit r13 (clear, clock, RinSignals[13], bus_data, R13_data_out);
+	 neg_register_32bit r14 (clear, clock, RinSignals[14], bus_data, R14_data_out);
+	 neg_register_32bit r15 (clear, clock, RinSignals[15], bus_data, R15_data_out);
 	 
 	 neg_register_32bit Y_register (clear, clock, Y_enable, bus_data, Y_data_out);
 	 
@@ -201,9 +201,9 @@ module datapath(
 //	defparam r5.INIT = 32'h00000015;
 
 	//mfhi
-//	defparam PC_register.INIT_PC = 32'h0000000B;
-//	defparam r3.INIT = 32'h00000036;
-//	defparam HI_register.INIT = 32'h00000024;
+	defparam PC_register.INIT_PC = 32'h0000000B;
+	defparam r3.INIT = 32'h00000036;
+	defparam HI_register.INIT = 32'h00000024;
 	
 	//mflo
 //	defparam PC_register.INIT_PC = 32'h0000000C;
@@ -215,8 +215,8 @@ module datapath(
 //	defparam r6.INIT = 32'h00000036;
 
 	//in
-	defparam PC_register.INIT_PC = 32'h0000000E;
-	defparam Input_port_register.INIT = 32'h00000036;
+//	defparam PC_register.INIT_PC = 32'h0000000E;
+//	defparam Input_port_register.INIT = 32'h00000036;
 
 	//brzr
 //	defparam PC_register.INIT_PC = 32'h0000000F;
