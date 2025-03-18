@@ -77,7 +77,7 @@ always @(Present_state) begin
 				PCout <= 1; Zlowout <= 0; MDRout <= 0;
             MARin <= 0; Zin <= 0;
             PCin <= 0; MDRin <= 0; IRin <= 0; Yin <= 0;
-            IncPC <= 1; Read <= 0; AND <= 0;
+            IncPC <= 1; Read <= 0; Write <= 0; AND <= 0;
 				Rin <= 0; Rout <= 0;
 				GRA <= 0; GRB <= 0; GRC <= 0; BAout <= 0;
 				Register_enable_Signals <= 16'd0; RoutSignals <= 16'd0;

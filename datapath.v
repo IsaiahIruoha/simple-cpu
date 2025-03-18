@@ -215,8 +215,8 @@ module datapath(
 //	defparam r6.INIT = 32'h00000036;
 
 	//in
-//	defparam PC_register.INIT_PC = 32'h0000000E;
-//	defparam Input_port_register.INIT = 32'h00000036;
+	defparam PC_register.INIT_PC = 32'h0000000E;
+	defparam Input_port_register.INIT = 32'h00000036;
 
 	//brzr
 //	defparam PC_register.INIT_PC = 32'h0000000F;
@@ -228,7 +228,7 @@ module datapath(
 	
 	//brpl
 //	defparam PC_register.INIT_PC = 32'h00000011;
-//	defparam r1.INIT = 32'h00000001;
+//	defparam r1.INIT = 32'hFFFFFFFF;
 	
 	//brmi
 //	defparam PC_register.INIT_PC = 32'h00000012;
