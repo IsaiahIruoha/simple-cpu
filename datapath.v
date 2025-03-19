@@ -20,6 +20,7 @@ module datapath(
 	 reg [15:0] RinSignals, RoutSignals;
 	 wire[15:0] ir_enable_signals;
 	 wire[15:0] ir_output_signals;
+	 wire R8in;
 	 
 	 always@(*)begin		
 			if (ir_enable_signals)
@@ -76,7 +77,7 @@ module datapath(
 	 
 
     // Instantiate 32-bit registers
-    neg_register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
+    register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
 	 neg_register_32bit r1 (clear, clock, RinSignals[1], bus_data, R1_data_out);
 	 neg_register_32bit r2 (clear, clock, RinSignals[2], bus_data, R2_data_out);
 	 neg_register_32bit r3 (clear, clock, RinSignals[3], bus_data, R3_data_out);
@@ -84,7 +85,7 @@ module datapath(
 	 neg_register_32bit r5 (clear, clock, RinSignals[5], bus_data, R5_data_out);
 	 neg_register_32bit r6 (clear, clock, RinSignals[6], bus_data, R6_data_out);
 	 neg_register_32bit r7 (clear, clock, RinSignals[7], bus_data, R7_data_out);
-	 neg_register_32bit r8 (clear, clock, RinSignals[8], bus_data, R8_data_out);
+	 neg_register_32bit r8 (clear, clock, R8in, bus_data, R8_data_out);
 	 neg_register_32bit r9 (clear, clock, RinSignals[9], bus_data, R9_data_out);
 	 neg_register_32bit r10 (clear, clock, RinSignals[10], bus_data, R10_data_out);
 	 neg_register_32bit r11 (clear, clock, RinSignals[11], bus_data, R11_data_out);

@@ -1,13 +1,14 @@
 `timescale 1ns/10ps
+
 module control_unit (
-	output reg Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout // define the inputs and outputs to your Control Unit here
-				  BAout, Cout, OutPortin, MDRin, MARin, Yin, Zin, IRin, PCin, CONin, LOin, HIin, IncPC,
-				  Read, Write, Clear, Run
-				  ADD, AND, OR, SHR,
+	output reg Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout, // define the inputs and outputs to your Control Unit here
+				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
+				  Read, Write, Clear, Run,
+				  operation,
 	input [31:0] IR,
-	input Clock, Reset, Stop, Con_FF);
+	input Clock, Reset, Stop);
 	
-parameter Reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, fetch2= 8'b00000011,
+parameter reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, fetch2= 8'b00000011,
 			 add3 = 8'b00000100, add4= 8'b00000101, add5= 8'b00000110, sub3 = 8'b00000111, sub4 = 8'b00001000, sub5 = 8'b00001001,
 			 mul3 = 8'b00001010, mul4 = 8'b00001011, mul5 = 8'b00001100, mul6 = 8'b00001101, div3 = 8'b00001110, div4 = 8'b00001111,
 			 div5 = 8'b00010000, div6 = 8'b00010001, or3 = 8'b00010010, or4 = 8'b00010011, or5 = 8'b00010100, and3 = 8'b00010101, 
@@ -22,7 +23,7 @@ parameter Reset_state= 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010, 
 			 jal4 = 8'b01000110, mfhi3 = 8'b01000111, mflo3 = 8'b01001000, in3 = 8'b01001001, out3 = 8'b01001010, nop3 = 8'b01001011, 
 			 halt3 = 8'b01001100;
 
-reg [3:0] present_state = reset_state; // adjust the bit pattern based on the number of states
+reg [7:0] present_state = reset_state; // adjust the bit pattern based on the number of states
 
 always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
 	begin
@@ -170,8 +171,12 @@ always @(present_state) // do the job for each state
 	begin
 		case (present_state) // assert the required signals in each state
 			reset_state: begin
-					ra <= 0; Grb <= 0; Grc <= 0; Yin <= 0; // initialize the signals
-
+					Run <= 1; 
+					Gra <= 0; Grb <= 0; Grc <= 0; Rin <= 0; Rout <= 0; LOout <= 0; HIout <= 0; ZLowout <= 0; ZHighout <= 0; MDRout <= 0; PCout <= 0; CON_out <= 0; InPortout <= 0;
+				   BAout <= 0; Cout <= 0; OutPortin <= 0; MDRin <= 0; MARin <= 0; Yin <= 0; ZHighIn <= 0; ZLowIn <= 0; IRin <= 0; PCin <= 0; CON_in <= 0; LOin <= 0; HIin <= 0; R8in <= 0; IncPC <= 0;
+				   Read <= 0; Write <= 0; Clear <= 0;
+				   operation <= 4'b0000;
+					
 			end
 				
 			fetch0: begin
@@ -196,11 +201,11 @@ always @(present_state) // do the job for each state
 			
 			add4, sub4: begin
 					Grb <= 0; Rout <= 0; Yin <= 0;
-					Grc <= 1; Rout <= 1; Zin <= 1; 
+					Grc <= 1; Rout <= 1; ZLowIn <= 1; 
 			end
 			
 			add5, sub5: begin
-					Grc <=0; Rout <= 0; Zin <= 0;
+					Grc <=0; Rout <= 0; ZLowIn <= 0;
 					ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
@@ -253,62 +258,62 @@ always @(present_state) // do the job for each state
 			
 			// load
 			ld3: begin
-					Yin <= 1; GRB <= 1; BAout <= 1;
-					#15 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; Grb <= 1; BAout <= 1;
+					#15 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			ld4: begin
-					Cout <= 1; operation <= 5'b00011; Zin <= 1;
-					#10 Cout <= 0; Zin <= 0; Zlowout = 1; MARin = 1;
+					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
+					#10 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
 			end
 
 			ld5: begin
-					#10 Zlowout = 0; MARin = 0; Read = 1;
+					#10 ZLowout = 0; MARin = 0; Read = 1;
 			end
 			
 			ld6: begin
 					MDRin = 1;
 					#10 Read = 0; 
-					#5 MDRin = 0; MDRout = 1; GRA = 1; Rin = 1;
+					#5 MDRin = 0; MDRout = 1; Gra = 1; Rin = 1;
 			end
 			
 			ld7: begin
-					#10 MDRout = 0; GRA = 0; Rin = 0;
+					#10 MDRout = 0; Gra = 0; Rin = 0;
 			end
 			
 			// ldi
 			ldi3: begin
-					Yin <= 1; GRB <= 1; BAout <= 1;
-					#15 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; Grb <= 1; BAout <= 1;
+					#15 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			ldi4: begin
-					Cout <= 1; operation <= 5'b00011; Zin <= 1;
-					#10 Cout <= 0; Zin <= 0; Zlowout <= 1; GRA <= 1; Rin <= 1;
+					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
+					#10 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
 			ldi5: begin
-					Zlowout <= 0; GRA <= 0; Rin <= 0;
+					ZLowout <= 0; Gra <= 0; Rin <= 0;
 			end
 			
 			//st
 			st3: begin
-					Yin <= 1; GRB <= 1; BAout <= 1;
-					#15 GRB <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; Grb <= 1; BAout <= 1;
+					#15 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			st4: begin
-					Cout <= 1; operation <= 5'b00011; Zin <= 1;
-					#10 Cout <= 0; Zin <= 0; Zlowout = 1; MARin = 1;
+					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
+					#10 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
 			end
 
 			st5: begin
-					#10 Zlowout = 0; MARin = 0;
-					#5 GRA = 1; Rout = 1; MDRin = 1;
+					#10 ZLowout = 0; MARin = 0;
+					#5 Gra = 1; Rout = 1; MDRin = 1;
 			end
 			
 			st6: begin
-					#10 GRA <= 0; Rout<= 0; MDRin <= 0; 
+					#10 Gra <= 0; Rout<= 0; MDRin <= 0; 
 					#5  MDRout = 1; Write <= 1;
 			end
 			
@@ -318,23 +323,23 @@ always @(present_state) // do the job for each state
 			
 			// addi, ori, andi
 			addi3, ori3, andi3: begin
-					Yin <= 1; GRB <= 1; Rout <= 1;
-					#10 GRB <= 0; Rout <= 0; Yin <= 0; Cout <= 1;
+					Yin <= 1; Grb <= 1; Rout <= 1;
+					#10 Grb <= 0; Rout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			addi4, ori4, andi4: begin
-					Cout <= 1; operation <= 5'b00101; Zin <= 1;
-					#10 Cout <= 0; Zin <= 0; Zlowout <= 1; GRA <= 1; Rin <= 1;
+					Cout <= 1; operation <= 5'b00101; ZLowIn <= 1;
+					#10 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
 			addi5, ori5, andi5: begin
-					Zlowout <= 0; GRA <= 0; Rin <= 0;
+					ZLowout <= 0; Gra <= 0; Rin <= 0;
 			end
 			
 			// branch
 			br3: begin
-					Rout <= 1; GRA <= 1; CON_in <= 1;
-					#15 Rout <= 0; GRA <= 0; CONin <= 0; PCout <= 1; Yin <= 1;
+					Rout <= 1; Gra <= 1; CON_in <= 1;
+					#15 Rout <= 0; Gra <= 0; CON_in <= 0; PCout <= 1; Yin <= 1;
 			end
 			
 			br4: begin
@@ -342,51 +347,56 @@ always @(present_state) // do the job for each state
 			end
 			
 			br5: begin
-					Cout <= 1; operation <= 5'b00011; Zin <= 1;
+					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
 					if (CON_out) begin
-						#10 Zlowout <= 1; PCin <= 1; Cout <= 0; Zin <= 0;
+						#10 ZLowout <= 1; PCin <= 1; Cout <= 0; ZLowIn <= 0;
 					end
 			end
 			
 			br6: begin
-					#10 Zlowout <= 0; PCin <= 0;
+					#10 ZLowout <= 0; PCin <= 0;
 			end
 			
 			// jumps
 			jr3: begin
-					 GRA <= 1; Rout <= 1; PCin <= 1;
-					#15 GRA <= 0; Rout <= 0; PCin <= 0;
+					Gra <= 1; Rout <= 1; PCin <= 1;
+					#15 Gra <= 0; Rout <= 0; PCin <= 0;
 			end
 			
 			jal3: begin
-					GRA <= 1; Rout <= 1; PCin <= 1;
-					#10 PCout <= 0; RegisteRin_Signals[8] <= 0; GRA <= 1; Rout <= 1; PCin <= 1;
+					PCout <= 1; R8in <= 1;
+					#15 PCout <= 0; R8in <= 0; Gra <= 1; Rout <= 1; PCin <= 1;
 			end
 			
 			jal4: begin
-					#10 GRA <= 0; Rout <= 0; PCin <= 0;
+					#10 Gra <= 0; Rout <= 0; PCin <= 0;
 			end
 			
 			// mfhi mflo
 			mfhi3: begin
-					GRA = 1; Rin = 1; HIout = 1;
-					#10 GRA <= 0; Rin <= 0; HIout <= 0;
+					Gra = 1; Rin = 1; HIout = 1;
+					#10 Gra <= 0; Rin <= 0; HIout <= 0;
 			end
 			
 			mflo3: begin
-					GRA <= 1; Rin <= 1; LOout <= 1;
-					#10 GRA <= 0; Rin <= 0; LOout <= 0;
+					Gra <= 1; Rin <= 1; LOout <= 1;
+					#10 Gra <= 0; Rin <= 0; LOout <= 0;
 			end
 			
 			//in out
 			in3: begin
-					GRA <= 1; Rin <= 1; InPortout<= 1;
-					#10 GRA <= 0; Rin <= 0; InPortout <= 0;
+					Gra <= 1; Rin <= 1; InPortout<= 1;
+					#10 Gra <= 0; Rin <= 0; InPortout <= 0;
 			end
 			
 			out3: begin
-					GRA <= 1; Rout <= 1; out_in <= 1;
-					#10 GRA <= 0; Rout <= 0; out_in <= 0;
+					Gra <= 1; Rout <= 1; OutPortin <= 1;
+					#10 Gra <= 0; Rout <= 0; OutPortin <= 0;
+			end
+			
+			// halt
+			halt3: begin
+					Run <= 0;
 			end
 			
 		endcase
