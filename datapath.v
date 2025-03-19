@@ -1,26 +1,27 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input  wire PCout, ZLowout, MDRout, MAR_enable, Z_low_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, Write, AND, clock, //replace LO_enable / Y_enable with out_enable for tb to make life easier
-    input wire ZHighout,LOout,HIout,Cout,InPortout,
-	 input wire GRA, GRB, GRC, Rin, Rout, BAout, 
-    input wire[4:0] operation,
-    input wire[31:0] encoder_input,
-	 input wire[15:0] register_enable_signals, 
-	 input wire CON_in, CON_output
+    input clock, reset, stop,
+//    input wire[4:0] operation,
+    input wire [31:0] device_data,
+	 input wire[15:0] register_enable_signals,
+	 output wire [31:0] OutPort_data_out
 );
 	
+	
+	wire Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout,
+				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
+				  Read, Write, Clear, Run;
 
+	 // bus stuff
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
-//	 wire CON_output;
 	 
 	 wire[31:0] RAM_data_out;
 	 
 	 reg [15:0] RinSignals, RoutSignals;
 	 wire[15:0] ir_enable_signals;
 	 wire[15:0] ir_output_signals;
-	 wire R8in;
 	 
 	 always@(*)begin		
 			if (ir_enable_signals)
@@ -37,8 +38,6 @@ module datapath(
 	 wire HI_enable;
 //	 wire Output_port_enable;
 	 wire Input_port_strobe; //will need to be coming from device later
-	 
-	 wire [31:0] OutPort_data_out, device_data;  //going to feed to external device later
 	
 
 	 //5 bits that go from encoder to mux
@@ -159,6 +158,46 @@ module datapath(
 		.read_enable(Read)
 	 );
 	 
+	 // Control unit
+	 control_unit control(
+		.Gra(Gra),
+		.Grb(Grb),
+		.Grc(Grc),
+		.Rin(Rin),
+		.Rout(Rout),
+		.LOout(LOout),
+		.HIout(HIout),
+		.ZLowout(ZLowout),
+		.ZHighout(ZHighout),
+		.MDRout(MDRout), 
+		.PCout(PCout), 
+		.CON_out(CON_output), 
+		.InPortout(InPortout),
+		.BAout(BAout),
+		.Cout(Cout),
+		.OutPortin(Output_port_enable),
+		.MDRin(MDR_enable), 
+		.MARin(MAR_enable),
+		.Yin(Y_enable), 
+		.ZHighIn(Z_high_enable),
+		.ZLowIn(Z_low_enable),
+		.IRin(IR_enable), 
+		.PCin(PC_enable), 
+		.CON_in(CON_in), 
+		.LOin(LO_enable), 
+		.HIin(HI_enable), 
+		.R8in(R8in), 
+		.IncPC(IncPC),
+		.Read(Read), 
+		.Write(Write), 
+		.Clear(clear), 
+		.Run(Run),
+		.operation(operation),
+		.IR(IR_data_out),
+		.Clock(clock),
+		.Reset(clear),
+		.Stop(stop)
+	 );
 	 
 	 
 	 //ld case 2

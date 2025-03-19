@@ -28,7 +28,7 @@ reg [7:0] present_state = reset_state; // adjust the bit pattern based on the nu
 always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
 	begin
 		if (Reset == 1'b1) present_state = reset_state;
-		if (Stop == 1'b1) present_state = halt3;
+//		if (Stop == 1'b1) present_state = halt3;
 		else case (present_state)
 			reset_state : present_state = fetch0;
 			fetch0 : present_state = fetch1;
