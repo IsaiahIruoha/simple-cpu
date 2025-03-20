@@ -25,6 +25,7 @@ module datapath(
 	 wire[15:0] ir_enable_signals;
 	 wire[15:0] ir_output_signals;
 	 wire[15:0] register_enable_signals;
+	 wire CON_output;
 	 
 	 always@(*)begin		
 			if (ir_enable_signals)
@@ -107,6 +108,10 @@ module datapath(
 	 
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 select_encode_ir ir_encode(IR_data_out, Gra, Grb, Grc, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
+	 
+//	 wire D;
+//	 condition_decoder decoder(IR_data_out[20:19],bus_data, D);
+//	 con_ff flip_flip(clock, D, CON_in, CON_output);
 	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
 	 register_32bit Input_port_register (clear, clock, Input_port_strobe, device_data, InPort_data_out);

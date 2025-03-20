@@ -7,7 +7,7 @@ module con_ff(
 
 	initial Q = 1'd0;
 
-    always @(posedge clk) begin
+    always @(negedge clk) begin
 			if(CON_in)
             Q <= D; 
     end

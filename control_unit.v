@@ -38,31 +38,31 @@ always @(posedge Clock, posedge Reset) // finite state machine; if clock or rese
 				case (IR[31:27]) // inst. decoding based on the opcode to set the next state
 					5'b00011 : present_state = add3;
 					5'b00100	: present_state = sub3;
-					5'b01110	: present_state = mul3;
+					5'b10000	: present_state = mul3;
 					5'b01111	: present_state = div3;
-					5'b00101	: present_state = shr3;
-					5'b00110	: present_state = shl3;
+					5'b01001	: present_state = shr3;
+					5'b01011	: present_state = shl3;
 					5'b00111	: present_state = ror3;
 					5'b01000	: present_state = rol3;
-					5'b01001	: present_state = and3;
-					5'b01010	: present_state = or3;
-					5'b10000	: present_state = neg3;
-					5'b10001	: present_state = not3;
+					5'b00101	: present_state = and3;
+					5'b00110	: present_state = or3;
+					5'b10001	: present_state = neg3;
+					5'b10010	: present_state = not3;
 					5'b00000	: present_state = ld3;
 					5'b00001	: present_state = ldi3;
 					5'b00010	: present_state = st3;
-					5'b01011	: present_state = addi3;
-					5'b01100	: present_state = andi3;
-					5'b01101	: present_state = ori3;
-					5'b10010	: present_state = br3;
-					5'b10011	: present_state = jr3;
+					5'b01100	: present_state = addi3;
+					5'b01101	: present_state = andi3;
+					5'b01110	: present_state = ori3;
+					5'b10011	: present_state = br3;
+					5'b10101	: present_state = jr3;
 					5'b10100	: present_state = jal3;
-					5'b10111	: present_state = mfhi3;
+					5'b11001	: present_state = mfhi3;
 					5'b11000	: present_state = mflo3;
-					5'b10101	: present_state = in3;
-					5'b10110	: present_state = out3;
-					5'b11001	: present_state = nop3;
-					5'b11010	: present_state = halt3;
+					5'b10110	: present_state = in3;
+					5'b10111	: present_state = out3;
+					5'b11011	: present_state = halt3;
+					5'b11010	: present_state = nop3;
 
 				endcase
 			end
@@ -289,11 +289,12 @@ always @(present_state) // do the job for each state
 			
 			ldi4: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
-					#10 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
+					#15 Cout <= 0; ZLowIn <= 0;
 			end
 			
 			ldi5: begin
-					ZLowout <= 0; Gra <= 0; Rin <= 0;
+					ZLowout <= 1; Gra <= 1; Rin <= 1;
+					#15 ZLowout <= 0; Gra <= 0; Rin <= 0;
 			end
 			
 			//st
@@ -397,6 +398,10 @@ always @(present_state) // do the job for each state
 			// halt
 			halt3: begin
 					Run <= 0;
+			end
+			
+			//nop
+			nop3: begin
 			end
 			
 		endcase

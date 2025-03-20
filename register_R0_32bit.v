@@ -10,7 +10,7 @@ module register_R0_32bit(
     wire [31:0] Q;
     wire BAout_not;
     
-    register_32bit R0 (
+    neg_register_32bit R0 (
         .clear(clear),
         .clock(clock),
         .enable(R0in),
