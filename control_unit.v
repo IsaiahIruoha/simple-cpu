@@ -452,7 +452,7 @@ always @(present_state) // do the job for each state
 			
 			out3: begin
 					Gra <= 1; Rout <= 1; OutPortin <= 1;
-					#10 Gra <= 0; Rout <= 0; OutPortin <= 0;
+					#15 Gra <= 0; Rout <= 0; OutPortin <= 0;
 			end
 			
 			// halt

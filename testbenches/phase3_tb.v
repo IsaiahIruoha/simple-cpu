@@ -4,13 +4,13 @@ module phase3_tb;
 	reg clock, reset, stop;
 	wire [31:0] device_data, OutPort_data_out;
 	
-	wire [31:0] mdr_data_out, PC_data, bus_data, IR_data, mar_data, R0_data, R1_data, R2_data, R3_data, R4_data, R5_data, R6_data, R7_data, R8_data, R9_data, R10_data, R11_data, R12_data, R13_data, R14_data, R15_data, HI_data, LO_data, Z_data, Y_data;
-	wire [7:0] present_state;
-	wire [4:0] operation;
-	wire [63:0] c_data;
-	wire Zin, Read, MDRin, CONout, Yin, CONin;
+	wire [31:0] mdr_data_out, PC_data, bus_data, IR_data, mar_data, R0_data, R1_data, R2_data, R3_data, R4_data, R5_data, R6_data, R7_data, R8_data, R9_data, R10_data, R11_data, R12_data, R13_data, R14_data, R15_data, HI_data, LO_data, out_data, Z_data, Y_data;
+	wire [7:0] present_state, display1, display2;
+//	wire [4:0] operation;
+//	wire [63:0] c_data;
+//	wire Zin, Read, MDRin, CONout, Yin, CONin;
 
-datapath DUT(.clock(clock), .reset(reset), .stop(stop), .device_data(inport_data), .OutPort_data_out(OutPort_data));
+datapath DUT(.clock(clock), .reset(reset), .stop(stop), .device_data(inport_data), .OutPort_data_out(OutPort_data_out));
 
  assign mdr_data_out = DUT.mdr_unit.MDRout;
  assign bus_data = DUT.bus_data;
@@ -38,17 +38,20 @@ datapath DUT(.clock(clock), .reset(reset), .stop(stop), .device_data(inport_data
  assign LO_data = DUT.LO_data_out;
  assign R10_data = DUT.R10_data_out;
  assign Z_data = DUT.ZLow_data_out;
- assign operation = DUT.operation;
- assign c_data = DUT.c_data_out;
- assign Zin = DUT.Z_low_enable;
- assign Read = DUT.Read;
- assign MDRin = DUT.MDR_enable;
- assign Y_data = DUT.Y_data_out;
- assign CONout = DUT.CON_output;
- assign Yin = DUT.Y_enable;
- assign CONin = DUT.CON_in;
- assign Zout = DUT.ZLowout;
- assign PCin = DUT.PC_enable;
+ assign out_data = DUT.OutPort_data_out;
+// assign operation = DUT.operation;
+// assign c_data = DUT.c_data_out;
+// assign Zin = DUT.Z_low_enable;
+// assign Read = DUT.Read;
+// assign MDRin = DUT.MDR_enable;
+// assign Y_data = DUT.Y_data_out;
+// assign CONout = DUT.CON_output;
+// assign Yin = DUT.Y_enable;
+// assign CONin = DUT.CON_in;
+// assign Zout = DUT.ZLowout;
+// assign PCin = DUT.PC_enable;
+	assign display1 =DUT.displayout1;
+	assign display2 = DUT.displayout2;
  
 initial
 	begin

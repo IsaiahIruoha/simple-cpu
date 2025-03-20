@@ -2,12 +2,12 @@
 
 module datapath(
     input clock, reset, stop,
-//    input wire[4:0] operation,
     input wire [31:0] device_data,
-
 	 output wire [31:0] OutPort_data_out
 );
 	
+	// Mock Seven Segment Display
+	wire [7:0] displayout1, displayout2;
 	
 	wire Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout,
 				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
@@ -109,19 +109,20 @@ module datapath(
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
 	 select_encode_ir ir_encode(IR_data_out, Gra, Grb, Grc, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
 	 
-//	 wire D;
-//	 condition_decoder decoder(IR_data_out[20:19],bus_data, D);
-//	 con_ff flip_flip(clock, D, CON_in, CON_output);
 	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
 	 register_32bit Input_port_register (clear, clock, Input_port_strobe, device_data, InPort_data_out);
-	 register_32bit Output_port_register (clear, clock, Output_port_enable, bus_data, OutPort_data_out);
+	 neg_register_32bit Output_port_register (clear, clock, Output_port_enable, bus_data, OutPort_data_out);
  
 	 register_32bit MAR_register (clear, clock, MAR_enable, bus_data, MAR_data_out);
 	 
 	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, RAM_data_out, MDR_data_out);
 	
 	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,RoutSignals}, mux_select_signal);
+	 
+	 // Seven Segment Displays
+	 Seven_Seg_Display_Out display1(.clk(clock), .data(OutPort_data_out[3:0]), .outputt(displayout1));
+	 Seven_Seg_Display_Out display2(.clk(clock), .data(OutPort_data_out[7:4]), .outputt(displayout2));
 
     // Instantiate the 32-to-1 MUX
     mux_32_to_1 bus_mux (
@@ -207,10 +208,11 @@ module datapath(
 		.Stop(stop)
 	 );
 	 
+	 defparam Input_port_register.INIT = 32'h000000C0;
 	 
 	 //ld case 2
 //	 defparam PC_register.INIT_PC = 32'h00000001;
-	 defparam r2.INIT = 32'h00000078;
+//	 defparam r2.INIT = 32'h00000078;
 
 	//ldi case 1
 //	 defparam PC_register.INIT_PC = 32'h00000002;
