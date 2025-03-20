@@ -4,7 +4,7 @@ module datapath(
     input clock, reset, stop,
 //    input wire[4:0] operation,
     input wire [31:0] device_data,
-	 input wire[15:0] register_enable_signals,
+
 	 output wire [31:0] OutPort_data_out
 );
 	
@@ -17,11 +17,14 @@ module datapath(
 	 wire [31:0] bus_data;
 	 wire [63:0] c_data_out;
 	 
+	 wire[4:0] operation;
+	 
 	 wire[31:0] RAM_data_out;
 	 
 	 reg [15:0] RinSignals, RoutSignals;
 	 wire[15:0] ir_enable_signals;
 	 wire[15:0] ir_output_signals;
+	 wire[15:0] register_enable_signals;
 	 
 	 always@(*)begin		
 			if (ir_enable_signals)
@@ -36,7 +39,7 @@ module datapath(
 
 	 // enables for various registers
 	 wire HI_enable;
-//	 wire Output_port_enable;
+	 wire Output_port_enable;
 	 wire Input_port_strobe; //will need to be coming from device later
 	
 
@@ -103,7 +106,7 @@ module datapath(
 	 PC_register_32bit #(.INIT_PC(32'h00000000)) PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
 	 
 	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
-	 select_encode_ir ir_encode(IR_data_out, GRA, GRB, GRC, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
+	 select_encode_ir ir_encode(IR_data_out, Gra, Grb, Grc, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
 	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
 	 register_32bit Input_port_register (clear, clock, Input_port_strobe, device_data, InPort_data_out);
@@ -202,7 +205,7 @@ module datapath(
 	 
 	 //ld case 2
 //	 defparam PC_register.INIT_PC = 32'h00000001;
-//	 defparam r2.INIT = 32'h00000078;
+	 defparam r2.INIT = 32'h00000078;
 
 	//ldi case 1
 //	 defparam PC_register.INIT_PC = 32'h00000002;
@@ -241,9 +244,9 @@ module datapath(
 //	defparam r5.INIT = 32'h00000015;
 
 	//mfhi
-	defparam PC_register.INIT_PC = 32'h0000000B;
-	defparam r3.INIT = 32'h00000036;
-	defparam HI_register.INIT = 32'h00000024;
+//	defparam PC_register.INIT_PC = 32'h0000000B;
+//	defparam r3.INIT = 32'h00000036;
+//	defparam HI_register.INIT = 32'h00000024;
 	
 	//mflo
 //	defparam PC_register.INIT_PC = 32'h0000000C;

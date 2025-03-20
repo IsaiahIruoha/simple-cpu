@@ -3,8 +3,8 @@
 module control_unit (
 	output reg Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout, // define the inputs and outputs to your Control Unit here
 				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
-				  Read, Write, Clear, Run,
-				  operation,
+				  Read, Write, Clear, Run, 
+	output reg [4:0] operation,
 	input [31:0] IR,
 	input Clock, Reset, Stop);
 	
@@ -69,100 +69,100 @@ always @(posedge Clock, posedge Reset) // finite state machine; if clock or rese
 			
 		add3 : present_state = add4;
 		add4 : present_state = add5;
-		add5 : present_state = fetch0;
+		add5 : present_state = reset_state;
 			
 		addi3 : present_state = addi4;
 		addi4	: present_state = addi5;
-		addi5 : present_state = fetch0;
+		addi5 : present_state = reset_state;
 		
 		sub3 : present_state = sub4;
 		sub4 : present_state = sub5;
-		sub5 : present_state = fetch0;
+		sub5 : present_state = reset_state;
 		
 		mul3 : present_state = mul4;
 		mul4 : present_state = mul5;
 		mul5 : present_state = mul6;
-		mul6 : present_state = fetch0; 
+		mul6 : present_state = reset_state; 
 		
 		div3 : present_state = div4;
 		div4 : present_state = div5;
 		div5 : present_state = div6;
-		div6 : present_state = fetch0;
+		div6 : present_state = reset_state;
 		
 		or3 : present_state = or4;
 		or4 : present_state = or5;
-		or5 :	present_state = fetch0;
+		or5 :	present_state = reset_state;
 		
 		and3 : present_state = and4;
 		and4 : present_state = and5;
-		and5 : present_state = fetch0;
+		and5 : present_state = reset_state;
 		
 		shl3 : present_state = shl4;
 		shl4 : present_state = shl5;
-		shl5 : present_state = fetch0;
+		shl5 : present_state = reset_state;
 		
 		shr3 : present_state = shr4;
 		shr4 : present_state = shr5;
-		shr5 : present_state = fetch0;
+		shr5 : present_state = reset_state;
 		
 		rol3 : present_state = rol4;
 		rol4 : present_state = rol5;
-		rol5 : present_state = fetch0;
+		rol5 : present_state = reset_state;
 		
 		ror3 : present_state = ror4;
 		ror4 : present_state = ror5;
-		ror5 : present_state = fetch0;
+		ror5 : present_state = reset_state;
 		
 		neg3 : present_state = neg4;
-		neg4 : present_state = fetch0;
+		neg4 : present_state = reset_state;
 		
 		not3 : present_state = not4;
-		not4 : present_state = fetch0;
+		not4 : present_state = reset_state;
 		
 		ld3 : present_state = ld4;
 		ld4 : present_state = ld5;
 		ld5 : present_state = ld6;
 		ld6 : present_state = ld7;
-		ld7 : present_state = fetch0;
+		ld7 : present_state = reset_state;
 		
 		ldi3 : present_state = ldi4;
 		ldi4 : present_state = ldi5;
-		ldi5 : present_state = fetch0;
+		ldi5 : present_state = reset_state;
 		
 		st3 : present_state = st4;
 		st4 : present_state = st5;
 		st5 : present_state = st6;
 		st6 : present_state = st7;
-		st7 : present_state = fetch0;
+		st7 : present_state = reset_state;
 		
 		andi3	: present_state = andi4;
 		andi4 : present_state = andi5;
-		andi5 : present_state = fetch0;
+		andi5 : present_state = reset_state;
 		
 		ori3 : present_state = ori4;
 		ori4 : present_state = ori5;
-		ori5 : present_state = fetch0;
+		ori5 : present_state = reset_state;
 		
 		jal3 : present_state = jal4;
-		jal4 : present_state = fetch0;
+		jal4 : present_state = reset_state;
 		
-		jr3 : present_state = fetch0;
+		jr3 : present_state = reset_state;
 		
 		br3 : present_state = br4;
 		br4 : present_state = br5;
 		br5 : present_state = br6;
 		br6 :	present_state = br7;
-		br7 :	present_state = fetch0;
+		br7 :	present_state = reset_state;
 		
-		out3 : present_state = fetch0;
+		out3 : present_state = reset_state;
 		
-		in3 :	present_state = fetch0;
+		in3 :	present_state = reset_state;
 		
-		mflo3 : present_state = fetch0;
+		mflo3 : present_state = reset_state;
 		
-		mfhi3 : present_state = fetch0;
+		mfhi3 : present_state = reset_state;
 		
-		nop3 : present_state = fetch0;
+		nop3 : present_state = reset_state;
 
 		endcase
 	end
@@ -172,8 +172,8 @@ always @(present_state) // do the job for each state
 		case (present_state) // assert the required signals in each state
 			reset_state: begin
 					Run <= 1; 
-					Gra <= 0; Grb <= 0; Grc <= 0; Rin <= 0; Rout <= 0; LOout <= 0; HIout <= 0; ZLowout <= 0; ZHighout <= 0; MDRout <= 0; PCout <= 0; CON_out <= 0; InPortout <= 0;
-				   BAout <= 0; Cout <= 0; OutPortin <= 0; MDRin <= 0; MARin <= 0; Yin <= 0; ZHighIn <= 0; ZLowIn <= 0; IRin <= 0; PCin <= 0; CON_in <= 0; LOin <= 0; HIin <= 0; R8in <= 0; IncPC <= 0;
+					Gra <= 0; Grb <= 0; Grc <= 0; Rin <= 0; Rout <= 0; LOout <= 0; HIout <= 0; ZLowout <= 0; ZHighout <= 0; MDRout <= 0; PCout <= 1; CON_out <= 0; InPortout <= 0;
+				   BAout <= 0; Cout <= 0; OutPortin <= 0; MDRin <= 0; MARin <= 1; Yin <= 0; ZHighIn <= 0; ZLowIn <= 0; IRin <= 0; PCin <= 0; CON_in <= 0; LOin <= 0; HIin <= 0; R8in <= 0; IncPC <= 1;
 				   Read <= 0; Write <= 0; Clear <= 0;
 				   operation <= 4'b0000;
 					
@@ -186,7 +186,7 @@ always @(present_state) // do the job for each state
 			
 			fetch1: begin
 					MDRin <= 1; MDRout <= 1;
-					#10 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
+					#15 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
 			end
 			
 			fetch2: begin
@@ -264,7 +264,7 @@ always @(present_state) // do the job for each state
 			
 			ld4: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
-					#10 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
+					#15 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
 			end
 
 			ld5: begin
@@ -273,12 +273,12 @@ always @(present_state) // do the job for each state
 			
 			ld6: begin
 					MDRin = 1;
-					#10 Read = 0; 
-					#5 MDRin = 0; MDRout = 1; Gra = 1; Rin = 1;
+					#15 Read = 0; MDRin = 0; 
 			end
 			
 			ld7: begin
-					#10 MDRout = 0; Gra = 0; Rin = 0;
+					MDRout = 1; Gra = 1; Rin = 1;
+					#15 MDRout = 0; Gra = 0; Rin = 0;
 			end
 			
 			// ldi
