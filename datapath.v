@@ -3,11 +3,12 @@
 module datapath(
     input clock, reset, stop, Run,
     input wire [31:0] device_data,
-	 output wire [31:0] OutPort_data_out
+	 output wire [31:0] OutPort_data_out,
+	 output wire [7:0] displayout1, displayout2
 );
 	
 	// Mock Seven Segment Display
-	wire [7:0] displayout1, displayout2;
+	
 	
 	wire Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout,
 				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
@@ -208,7 +209,7 @@ module datapath(
 		.Stop(stop)
 	 );
 	 
-//	 defparam Input_port_register.INIT = 32'h000000C0;
+	 defparam Input_port_register.INIT = 32'h000000C0;
 	 
 	 //ld case 2
 //	 defparam PC_register.INIT_PC = 32'h00000001;
