@@ -7,11 +7,14 @@ module ram2 #(parameter init_RAM_data_out = 0) (
     input read_enable                // read enable input
 );
 
+(* ram_init_file = "phase4_david.mif" *)
+
 reg [31:0] mem [511:0];
+
 
 initial begin
 
-	 $readmemh("phase4.mem", mem);
+	 $readmemh("phase4.mif", mem); 
 	
     RAM_data_out = init_RAM_data_out;
 
