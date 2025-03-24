@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 module datapath(
-    input clock, reset, stop,
+    input clock, reset, stop, Run,
     input wire [31:0] device_data,
 	 output wire [31:0] OutPort_data_out
 );
@@ -11,7 +11,7 @@ module datapath(
 	
 	wire Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout,
 				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
-				  Read, Write, Clear, Run;
+				  Read, Write, Clear;
 
 	 // bus stuff
 	 wire [31:0] bus_data;
@@ -204,11 +204,11 @@ module datapath(
 		.operation(operation),
 		.IR(IR_data_out),
 		.Clock(clock),
-		.Reset(clear),
+		.Reset(reset),
 		.Stop(stop)
 	 );
 	 
-	 defparam Input_port_register.INIT = 32'h000000C0;
+//	 defparam Input_port_register.INIT = 32'h000000C0;
 	 
 	 //ld case 2
 //	 defparam PC_register.INIT_PC = 32'h00000001;
