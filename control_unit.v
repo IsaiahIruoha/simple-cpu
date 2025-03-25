@@ -189,17 +189,17 @@ always @(present_state) // do the job for each state
 				
 			fetch0: begin
 					PCout <= 1; MARin <= 1; IncPC <= 1; MDRout <= 1;
-					#10 PCout <= 0; MARin <= 0;PCin <= 1; Read <= 1;
+					#40 PCout <= 0; MARin <= 0;PCin <= 1; Read <= 1;
 			end
 			
 			fetch1: begin
 					MDRin <= 1; MDRout <= 1;
-					#15 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
+					#60 PCin <= 0; Read <= 0; MDRin <= 0; IRin <= 1; IncPC <= 0;
 			end
 			
 			fetch2: begin
 					MDRout <= 1; IRin <= 1; 
-					#10 MDRout <= 0; IRin <= 0;
+					#40 MDRout <= 0; IRin <= 0;
 			end
 			
 			// add and subtract, and, or, shl, shr, shra, rol, ror
@@ -305,88 +305,88 @@ always @(present_state) // do the job for each state
 			// load
 			ld3: begin
 					Yin <= 1; Grb <= 1; BAout <= 1;
-					#15 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					#60 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			ld4: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
-					#15 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
+					#60 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
 			end
 
 			ld5: begin
-					#10 ZLowout = 0; MARin = 0; Read = 1;
+					#40 ZLowout = 0; MARin = 0; Read = 1;
 			end
 			
 			ld6: begin
 					MDRin = 1;
-					#15 Read = 0; MDRin = 0; 
+					#60 Read = 0; MDRin = 0; 
 			end
 			
 			ld7: begin
 					MDRout = 1; Gra = 1; Rin = 1;
-					#15 MDRout = 0; Gra = 0; Rin = 0;
+					#60 MDRout = 0; Gra = 0; Rin = 0;
 			end
 			
 			// ldi
 			ldi3: begin
 					Yin <= 1; Grb <= 1; BAout <= 1;
-					#15 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					#60 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			ldi4: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
-					#15 Cout <= 0; ZLowIn <= 0;
+					#60 Cout <= 0; ZLowIn <= 0;
 			end
 			
 			ldi5: begin
 					ZLowout <= 1; Gra <= 1; Rin <= 1;
-					#15 ZLowout <= 0; Gra <= 0; Rin <= 0;
+					#60 ZLowout <= 0; Gra <= 0; Rin <= 0;
 			end
 			
 			//st
 			st3: begin
 					Yin <= 1; Grb <= 1; BAout <= 1;
-					#15 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
+					#60 Grb <= 0; BAout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			st4: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
-					#15 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
+					#60 Cout <= 0; ZLowIn <= 0; ZLowout = 1; MARin = 1;
 			end
 
 			st5: begin
-					#10 ZLowout = 0; MARin = 0;
+					#40 ZLowout = 0; MARin = 0;
 					#5 Gra = 1; Rout = 1; MDRin = 1;
 			end
 			
 			st6: begin
-					#10 Gra <= 0; Rout<= 0; MDRin <= 0; 
+					#40 Gra <= 0; Rout<= 0; MDRin <= 0; 
 					#5  MDRout = 1; Write <= 1;
 			end
 			
 			st7: begin
-					#10 MDRout = 0; Write <= 0;
+					#40 MDRout = 0; Write <= 0;
 			end
 			
 			// addi, ori, andi
 			addi3, ori3, andi3: begin
 					Yin <= 1; Grb <= 1; Rout <= 1;
-					#15 Grb <= 0; Rout <= 0; Yin <= 0; Cout <= 1;
+					#60 Grb <= 0; Rout <= 0; Yin <= 0; Cout <= 1;
 			end
 			
 			addi4: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
-					#15 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
+					#60 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
 			ori4: begin
 					Cout <= 1; operation <= 5'b00110; ZLowIn <= 1;
-					#15 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
+					#60 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
 			andi4: begin
 					Cout <= 1; operation <= 5'b00101; ZLowIn <= 1;
-					#15 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
+					#60 Cout <= 0; ZLowIn <= 0; ZLowout <= 1; Gra <= 1; Rin <= 1;
 			end
 			
 			addi5, ori5, andi5: begin
@@ -396,28 +396,28 @@ always @(present_state) // do the job for each state
 			// branch
 			br3: begin
 					Rout <= 1; Gra <= 1; CON_in <= 1;
-					#15 Rout <= 0; Gra <= 0; CON_in <= 0; PCout <= 1; Yin <= 1;
+					#60 Rout <= 0; Gra <= 0; CON_in <= 0; PCout <= 1; Yin <= 1;
 			end
 			
 			br4: begin
-					#10 PCout <= 0; Yin <= 0;
+					#40 PCout <= 0; Yin <= 0;
 			end
 			
 			br5: begin
 					Cout <= 1; operation <= 5'b00011; ZLowIn <= 1;
 					if (CON_out) begin
-						#15 ZLowout <= 1; PCin <= 1; Cout <= 0; ZLowIn <= 0;
+						#60 ZLowout <= 1; PCin <= 1; Cout <= 0; ZLowIn <= 0;
 					end
 			end
 			
 			br6: begin
-					#10 ZLowout <= 0; PCin <= 0;
+					#40 ZLowout <= 0; PCin <= 0;
 			end
 			
 			// jumps
 			jr3: begin
 					Gra <= 1; Rout <= 1;
-					#15 Gra <= 0; Rout <= 0; PCin <= 1;
+					#60 Gra <= 0; Rout <= 0; PCin <= 1;
 			end
 			
 			jr4: begin
@@ -426,33 +426,33 @@ always @(present_state) // do the job for each state
 			
 			jal3: begin
 					PCout <= 1; R8in <= 1;
-					#15 PCout <= 0; R8in <= 0; Gra <= 1; Rout <= 1; PCin <= 1;
+					#60 PCout <= 0; R8in <= 0; Gra <= 1; Rout <= 1; PCin <= 1;
 			end
 			
 			jal4: begin
-					#10 Gra <= 0; Rout <= 0; PCin <= 0;
+					#40 Gra <= 0; Rout <= 0; PCin <= 0;
 			end
 			
 			// mfhi mflo
 			mfhi3: begin
 					Gra = 1; Rin = 1; HIout = 1;
-					#10 Gra <= 0; Rin <= 0; HIout <= 0;
+					#40 Gra <= 0; Rin <= 0; HIout <= 0;
 			end
 			
 			mflo3: begin
 					Gra <= 1; Rin <= 1; LOout <= 1;
-					#10 Gra <= 0; Rin <= 0; LOout <= 0;
+					#40 Gra <= 0; Rin <= 0; LOout <= 0;
 			end
 			
 			//in out
 			in3: begin
 					Gra <= 1; Rin <= 1; InPortout<= 1;
-					#10 Gra <= 0; Rin <= 0; InPortout <= 0;
+					#40 Gra <= 0; Rin <= 0; InPortout <= 0;
 			end
 			
 			out3: begin
 					Gra <= 1; Rout <= 1; OutPortin <= 1;
-					#15 Gra <= 0; Rout <= 0; OutPortin <= 0;
+					#60 Gra <= 0; Rout <= 0; OutPortin <= 0;
 			end
 			
 			// halt

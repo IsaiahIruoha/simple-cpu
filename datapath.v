@@ -7,8 +7,14 @@ module datapath(
 	 output wire [7:0] displayout1, displayout2
 );
 	
-	// Mock Seven Segment Display
-	
+	wire slow_clock;
+
+	freq_divider #(.N(4)) clk_divider (
+    .clk_in(clock), 
+    .reset(reset), 
+    .clk_out(slow_clock)
+	);
+
 	
 	wire Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout,
 				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
@@ -81,49 +87,49 @@ module datapath(
 	 
 
     // Instantiate 32-bit registers
-    register_R0_32bit r0 (clear, clock, RinSignals[0], BAout, bus_data, R0_data_out);
-	 neg_register_32bit r1 (clear, clock, RinSignals[1], bus_data, R1_data_out);
-	 neg_register_32bit r2 (clear, clock, RinSignals[2], bus_data, R2_data_out);
-	 neg_register_32bit r3 (clear, clock, RinSignals[3], bus_data, R3_data_out);
-	 neg_register_32bit r4 (clear, clock, RinSignals[4], bus_data, R4_data_out);
-	 neg_register_32bit r5 (clear, clock, RinSignals[5], bus_data, R5_data_out);
-	 neg_register_32bit r6 (clear, clock, RinSignals[6], bus_data, R6_data_out);
-	 neg_register_32bit r7 (clear, clock, RinSignals[7], bus_data, R7_data_out);
-	 neg_register_32bit r8 (clear, clock, R8in, bus_data, R8_data_out);
-	 neg_register_32bit r9 (clear, clock, RinSignals[9], bus_data, R9_data_out);
-	 neg_register_32bit r10 (clear, clock, RinSignals[10], bus_data, R10_data_out);
-	 neg_register_32bit r11 (clear, clock, RinSignals[11], bus_data, R11_data_out);
-	 neg_register_32bit r12 (clear, clock, RinSignals[12], bus_data, R12_data_out);
-	 neg_register_32bit r13 (clear, clock, RinSignals[13], bus_data, R13_data_out);
-	 neg_register_32bit r14 (clear, clock, RinSignals[14], bus_data, R14_data_out);
-	 neg_register_32bit r15 (clear, clock, RinSignals[15], bus_data, R15_data_out);
+    register_R0_32bit r0 (clear, slow_clock, RinSignals[0], BAout, bus_data, R0_data_out);
+	 neg_register_32bit r1 (clear, slow_clock, RinSignals[1], bus_data, R1_data_out);
+	 neg_register_32bit r2 (clear, slow_clock, RinSignals[2], bus_data, R2_data_out);
+	 neg_register_32bit r3 (clear, slow_clock, RinSignals[3], bus_data, R3_data_out);
+	 neg_register_32bit r4 (clear, slow_clock, RinSignals[4], bus_data, R4_data_out);
+	 neg_register_32bit r5 (clear, slow_clock, RinSignals[5], bus_data, R5_data_out);
+	 neg_register_32bit r6 (clear, slow_clock, RinSignals[6], bus_data, R6_data_out);
+	 neg_register_32bit r7 (clear, slow_clock, RinSignals[7], bus_data, R7_data_out);
+	 neg_register_32bit r8 (clear, slow_clock, R8in, bus_data, R8_data_out);
+	 neg_register_32bit r9 (clear, slow_clock, RinSignals[9], bus_data, R9_data_out);
+	 neg_register_32bit r10 (clear, slow_clock, RinSignals[10], bus_data, R10_data_out);
+	 neg_register_32bit r11 (clear, slow_clock, RinSignals[11], bus_data, R11_data_out);
+	 neg_register_32bit r12 (clear, slow_clock, RinSignals[12], bus_data, R12_data_out);
+	 neg_register_32bit r13 (clear, slow_clock, RinSignals[13], bus_data, R13_data_out);
+	 neg_register_32bit r14 (clear, slow_clock, RinSignals[14], bus_data, R14_data_out);
+	 neg_register_32bit r15 (clear, slow_clock, RinSignals[15], bus_data, R15_data_out);
 	 
-	 neg_register_32bit Y_register (clear, clock, Y_enable, bus_data, Y_data_out);
+	 neg_register_32bit Y_register (clear, slow_clock, Y_enable, bus_data, Y_data_out);
 	 
-	 register_32bit HI_register (clear, clock, HI_enable, bus_data, HI_data_out);
-	 register_32bit LO_register (clear, clock, LO_enable, bus_data, LO_data_out);
-	 neg_register_32bit Z_high_register (clear, clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
-	 neg_register_32bit Z_low_register (clear, clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
+	 register_32bit HI_register (clear, slow_clock, HI_enable, bus_data, HI_data_out);
+	 register_32bit LO_register (clear, slow_clock, LO_enable, bus_data, LO_data_out);
+	 neg_register_32bit Z_high_register (clear, slow_clock, Z_high_enable, c_data_out[63:32], ZHigh_data_out);
+	 neg_register_32bit Z_low_register (clear, slow_clock, Z_low_enable, c_data_out[31:0], ZLow_data_out);
 	 
-	 PC_register_32bit #(.INIT_PC(32'h00000000)) PC_register (clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
+	 PC_register_32bit #(.INIT_PC(32'h00000000)) PC_register (slow_clock, clear, PC_enable, IncPC, bus_data, PC_data_out);
 	 
-	 register_32bit IR_register (clear, clock, IR_enable, bus_data, IR_data_out);
+	 register_32bit IR_register (clear, slow_clock, IR_enable, bus_data, IR_data_out);
 	 select_encode_ir ir_encode(IR_data_out, Gra, Grb, Grc, Rin, Rout, BAout, ir_enable_signals, ir_output_signals, C_sign_extended);
 	 
-	 con_ff_logic conff_unit(clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
+	 con_ff_logic conff_unit(slow_clock, IR_data_out[20:19], CON_in, bus_data, CON_output);
 	 
-	 register_32bit Input_port_register (clear, clock, Input_port_strobe, device_data, InPort_data_out);
-	 neg_register_32bit Output_port_register (clear, clock, Output_port_enable, bus_data, OutPort_data_out);
+	 register_32bit Input_port_register (clear, slow_clock, Input_port_strobe, device_data, InPort_data_out);
+	 neg_register_32bit Output_port_register (clear, slow_clock, Output_port_enable, bus_data, OutPort_data_out);
  
-	 register_32bit MAR_register (clear, clock, MAR_enable, bus_data, MAR_data_out);
+	 register_32bit MAR_register (clear, slow_clock, MAR_enable, bus_data, MAR_data_out);
 	 
-	 mdr_32bit mdr_unit(clock, clear, MDR_enable, Read, bus_data, RAM_data_out, MDR_data_out);
+	 mdr_32bit mdr_unit(slow_clock, clear, MDR_enable, Read, bus_data, RAM_data_out, MDR_data_out);
 	
 	 encoder_32_to_5 bus_encoder({{8{1'b0}},Cout,InPortout,MDRout,PCout,ZLowout,ZHighout,LOout,HIout,RoutSignals}, mux_select_signal);
 	 
 	 // Seven Segment Displays
-	 Seven_Seg_Display_Out display1(.clk(clock), .data(OutPort_data_out[3:0]), .outputt(displayout1));
-	 Seven_Seg_Display_Out display2(.clk(clock), .data(OutPort_data_out[7:4]), .outputt(displayout2));
+	 Seven_Seg_Display_Out display1(.clk(slow_clock), .data(OutPort_data_out[3:0]), .outputt(displayout1));
+	 Seven_Seg_Display_Out display2(.clk(slow_clock), .data(OutPort_data_out[7:4]), .outputt(displayout2));
 
     // Instantiate the 32-to-1 MUX
     mux_32_to_1 bus_mux (
@@ -156,13 +162,13 @@ module datapath(
     );
 
     // Instantiate the ALU
-    alu alu_unit(.clk(clock), .clear(clear), .A_reg(Y_data_out), .B_reg(bus_data), .opcode(operation), .C_reg(c_data_out));
+    alu alu_unit(.clk(slow_clock), .clear(clear), .A_reg(Y_data_out), .B_reg(bus_data), .opcode(operation), .C_reg(c_data_out));
 	 
 	 // RAM
 	 ram2 memory(
 	   .RAM_data_out(RAM_data_out),
 		.address(MAR_data_out[7:0]),
-		.clk(clock),
+		.clk(slow_clock),
 		.RAM_data_in(MDR_data_out),
 		.write_enable(Write),
 		.read_enable(Read)
@@ -204,7 +210,7 @@ module datapath(
 		.Run(Run),
 		.operation(operation),
 		.IR(IR_data_out),
-		.Clock(clock),
+		.Clock(slow_clock),
 		.Reset(reset),
 		.Stop(stop)
 	 );

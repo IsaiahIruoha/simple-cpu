@@ -14,7 +14,7 @@ reg [31:0] mem [511:0];
 
 initial begin
 
-	 $readmemh("phase4.mif", mem); 
+	 $readmemh("phase3.mif", mem); 
 	
     RAM_data_out = init_RAM_data_out;
 
