@@ -10,5 +10,5 @@ module condition_decoder(
     assign D = (C2 == 2'b00) ? (bus_data == 0) :       // (Branch if Zero)
                (C2 == 2'b01) ? (bus_data != 0) :       // (Branch if Nonzero)
                (C2 == 2'b10) ? (signed_bus_data > 0) : // (Branch if Positive, signed)
-               (C2 == 2'b11) ? (signed_bus_data < 0) : 0; // (Branch if Negative, signed)
+               (C2 == 2'b11) ? (signed_bus_data < 0) : 1'b0; // (Branch if Negative, signed)
 endmodule

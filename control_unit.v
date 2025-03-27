@@ -177,6 +177,40 @@ always @(posedge Clock, posedge Reset) // finite state machine; if clock or rese
 	
 always @(present_state) // do the job for each state
 	begin
+	
+	 Run       = 1'b0;
+    Gra       = 1'b0;
+    Grb       = 1'b0;
+    Grc       = 1'b0;
+    Rin       = 1'b0;
+    Rout      = 1'b0;
+    LOout     = 1'b0;
+    HIout     = 1'b0;
+    ZLowout   = 1'b0;
+    ZHighout  = 1'b0;
+    MDRout    = 1'b0;
+    PCout     = 1'b0;
+    InPortout = 1'b0;
+    BAout     = 1'b0;
+    Cout      = 1'b0;
+    OutPortin = 1'b0;
+    MDRin     = 1'b0;
+    MARin     = 1'b0;
+    Yin       = 1'b0;
+    ZHighIn   = 1'b0;
+    ZLowIn    = 1'b0;
+    IRin      = 1'b0;
+    PCin      = 1'b0;
+    CON_in    = 1'b0;
+    LOin      = 1'b0;
+    HIin      = 1'b0;
+    R8in      = 1'b0;
+    IncPC     = 1'b0;
+    Read      = 1'b0;
+    Write     = 1'b0;
+    Clear     = 1'b0;
+    operation = 5'b0;
+	
 		case (present_state) // assert the required signals in each state
 			reset_state: begin
 					Run <= 1; 
@@ -462,6 +496,9 @@ always @(present_state) // do the job for each state
 			
 			//nop
 			nop3: begin
+			end
+			
+			default: begin
 			end
 			
 		endcase

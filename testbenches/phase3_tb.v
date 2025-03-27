@@ -3,7 +3,7 @@
 module phase3_tb;
 	reg clock, reset, stop;
 	wire slow_clock;
-	wire [31:0] device_data, OutPort_data_out;
+	wire [31:0] device_data, OutPort_data_out, inport_data;
 	
 	wire [31:0] mdr_data_out, PC_data, bus_data, IR_data, mar_data, R0_data, R1_data, R2_data, R3_data, R4_data, R5_data, R6_data, R7_data, R8_data, R9_data, R10_data, R11_data, 
 	R12_data, R13_data, R14_data, R15_data, HI_data, LO_data, out_data, Z_data, Y_data;

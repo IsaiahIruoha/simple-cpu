@@ -3,7 +3,7 @@
 module div_tb;
  reg PCout, Zlowout, Zhighout, MDRout, R2out, R6out;
  reg MARin, Zlowin, Zhighin, PCin, MDRin, IRin, Yin;
- reg IncPC, Read, AND, R2in, R6in, LOin, HIin;
+ reg IncPC, Read, AND, R2in, R6in, LOin, HIin, clear;
  reg Clock;
  reg [31:0] Mdatain;
  reg [4:0] operation;

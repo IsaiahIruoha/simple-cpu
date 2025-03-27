@@ -6,6 +6,8 @@ module datapath(
 	 output wire [31:0] OutPort_data_out,
 	 output wire [7:0] displayout1, displayout2
 );
+
+// I put the defualt case back on the encoder, might mess some things up
 	
 	wire slow_clock;
 
@@ -17,8 +19,8 @@ module datapath(
 
 	
 	wire Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, CON_out, InPortout,
-				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
-				  Read, Write, Clear;
+				  BAout, Cout, OutPortin, MDR_enable, MAR_enable, Y_enable, Z_high_enable, Z_low_enable, IR_enable, PC_enable, CON_in, LO_enable, HIin, R8in, IncPC,
+				  Read, Write, clear;
 
 	 // bus stuff
 	 wire [31:0] bus_data;
@@ -32,6 +34,7 @@ module datapath(
 	 wire[15:0] ir_enable_signals;
 	 wire[15:0] ir_output_signals;
 	 wire[15:0] register_enable_signals;
+	 assign register_enable_signals = 16'b0;
 	 wire CON_output;
 	 
 	 always@(*)begin		

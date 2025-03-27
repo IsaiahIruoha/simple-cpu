@@ -10,7 +10,7 @@ module neg_register_32bit #(
     reg [DATA_WIDTH_IN-1:0] q;
     initial q = INIT;
 
-    always @ (clock) begin
+    always @ (negedge clock or posedge clear) begin
         if (clear) begin
             q <= {DATA_WIDTH_IN{1'b0}};
         end
