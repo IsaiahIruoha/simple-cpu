@@ -8,7 +8,7 @@ module mul_32bit (
     reg  signed [32:0] negMultiplicand; // -A (2's complement)
     reg  signed [63:0] partialProduct; 
     reg  signed [63:0] product;
-	 reg [2:0] bits;              
+	 reg [2:0] bits0, bits;              
     reg signed [33:0] recodedVal;
     integer i;
 
@@ -26,7 +26,7 @@ module mul_32bit (
             
             // Gather the 3 bits for this pair
             if (i == 0)
-                bits = {Rb[1], Rb[0], 1'b0}; 
+                bits0 = {Rb[1], Rb[0], 1'b0}; 
             else
                 bits = {Rb[2*i+1], Rb[2*i], Rb[2*i-1]};
 
@@ -40,6 +40,13 @@ module mul_32bit (
                 3'b101: recodedVal = negMultiplicand;   // -1 * A
                 3'b110: recodedVal = negMultiplicand;   // -1 * A
                 3'b111: recodedVal = 34'd0;
+            endcase
+				
+				case (bits0)
+                3'b000: recodedVal = 34'd0;
+                3'b010: recodedVal = multiplicand;      // +1 * A
+                3'b100: recodedVal = negMultiplicand <<< 1; // -2 * A
+                3'b110: recodedVal = negMultiplicand;   // -1 * A
             endcase
 
             // Sign-extend from 34 bits up to 64
