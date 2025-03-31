@@ -3,22 +3,22 @@ module negate_32bit(
     output wire [31:0] Rz   // Output negated value
 );
 
-    wire [31:0] temp;  // Inverted bits (one’s complement)
-    wire cout;         // Carry-out from addition (unused in negation)
+    wire [31:0] temp;  // Inverted bits  to get 1s complement
+    wire cout;         // Carry out
 
-    // Step 1: Bitwise NOT (one’s complement)
+    // Bitwise NOT
     not_32bit not_op (
         .Ra(Ra),
         .Rz(temp)
     );
 
-    // Step 2: Add 1 to get two’s complement
+    // Add 1 to get two’s complement
     add_32bit add_op (
         .Ra(temp), 
         .Rb(32'd1), 
         .cin({1'd0}), 
         .sum(Rz), 
-        .cout(cout)  // Carry-out is not used
+        .cout(cout)  
     );
 
 endmodule
