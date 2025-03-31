@@ -4,7 +4,7 @@ module ror_32bit(
   output wire [31:0] Rz         // Rotated output
 );
 
-    // Rotate Right: Combine right-shifted and left-shifted portions
+    // Rotate Right
   assign Rz = (Ra >> Rb[4:0]) | (Ra << (32 - Rb[4:0]));
 
 endmodule
