@@ -4,8 +4,8 @@ module mul_32bit (
     output reg  [63:0] Rz
 );
 
-    reg  signed [32:0] multiplicand;    // 33-bit sign-extended A
-    reg  signed [32:0] negMultiplicand; // -A (2's complement)
+	reg  signed [32:0] multiplicand;    // 33 bit sign extended A
+	reg  signed [32:0] negMultiplicand; // -A/ 2s complement
     reg  signed [63:0] partialProduct; 
     reg  signed [63:0] product;
 	 reg [2:0] bits0, bits;              
@@ -13,13 +13,9 @@ module mul_32bit (
     integer i;
 
     always @(*) begin
-        multiplicand    = {Ra[31], Ra};   // sign-extend to 33 bits
+	    multiplicand    = {Ra[31], Ra};   // sign extend to 33 bits
         negMultiplicand = -multiplicand;  // 2's complement negative
         product = 64'd0; 
-
-        // Booth's bit-pair recoding inspects (b_{2i+1}, b_{2i}, b_{2i-1}).
-        // For i=0, we use an implicit b_{-1}=0.
-        // We'll generate 16 partial products, each shifted by 2*i bits.
 
         for (i = 0; i < 16; i = i + 1) begin
              
@@ -49,13 +45,10 @@ module mul_32bit (
                 3'b110: recodedVal = negMultiplicand;   // -1 * A
             endcase
 
-            // Sign-extend from 34 bits up to 64
             partialProduct = {{(64-34){recodedVal[33]}}, recodedVal};
 
-            // Shift the partial product left by 2*i
             partialProduct = partialProduct <<< (2*i);
 
-            // Accumulate into final product
             product = product + partialProduct;
         end
         Rz = product;
