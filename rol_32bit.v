@@ -4,7 +4,7 @@ module rol_32bit(
   output wire [31:0] Rz           // Rotated output
 );
 
-    // Rotate Left: Combine left-shifted and right-shifted portions
+    //Combine left shifted and right shifted portions
   assign Rz = (Ra << Rb[4:0]) | (Ra >> (32 - Rb[4:0]));
 
 endmodule
