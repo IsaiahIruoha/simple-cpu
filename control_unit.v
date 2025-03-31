@@ -1,7 +1,7 @@
 `timescale 1ns/10ps
 
 module control_unit (
-	output reg Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, InPortout, // define the inputs and outputs to your Control Unit here
+	output reg Gra, Grb, Grc, Rin, Rout, LOout, HIout, ZLowout, ZHighout, MDRout, PCout, InPortout,
 				  BAout, Cout, OutPortin, MDRin, MARin, Yin, ZHighIn, ZLowIn, IRin, PCin, CON_in, LOin, HIin, R8in, IncPC,
 				  Read, Write, Clear, Run, 
 	output reg [4:0] operation,
