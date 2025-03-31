@@ -1,7 +1,7 @@
 module div_32bit(
     input  signed [31:0] Ra, // Dividend
     input  signed [31:0] Rb, // Divisor
-    output reg   signed [63:0] Rz // { remainder, quotient }
+    output reg   signed [63:0] Rz //remainder, quotient
 );
     integer i; 
     reg sign_dividend;
@@ -24,25 +24,25 @@ module div_32bit(
         quotient_int  = 0;
 
         for (i = 31; i >= 0; i = i - 1) begin
-            // Shift remainder left by 1 (making room for next bit)
+            // Shift remainder left by 1
             remainder_int = remainder_int <<< 1;
 
-            // Bring down next highest bit of abs_dividend
+            // Bring down next highest bit
             remainder_int[0] = abs_dividend[i];
 
             // Tentative subtract
             remainder_int = remainder_int - abs_divisor;
 
             if (remainder_int < 0) begin
-                // If negative, restore remainder
+                //if negative restore remainder
                 remainder_int = remainder_int + abs_divisor;
 
-                // Shift quotient left and put a 0 in the new LSB
+                //shift quotient left and put a 0 in the new LSB
                 quotient_int = quotient_int <<< 1;
                 quotient_int[0] = 0;
             end
             else begin
-                // If still >= 0, accept the subtraction
+                // If still greater than 0 accept the subtraction
                 // Shift quotient left and put a 1 in the new LSB
                 quotient_int = quotient_int <<< 1;
                 quotient_int[0] = 1;
